@@ -247,6 +247,7 @@ def persist_initial_state(quiz_data):
 	session["id"] = u.id
 	u.confirmation_code = gen_rand_code(session["id"])
 	db.session.commit()
+	print "flag1"
 
 	q = Quiz()
 	q.user_id = session["id"]
@@ -256,8 +257,10 @@ def persist_initial_state(quiz_data):
 		for j in xrange(4):
 			setattr(q, "q" + str(i+1) + "_c" + str(j+1), choices[j])
 	q.t_started = datetime.datetime.now()
+	print "flag3"
 	db.session.add(q)
 	db.session.commit()
+	print "flag2"
 
 # Routing
 def redirect_appropriately():
