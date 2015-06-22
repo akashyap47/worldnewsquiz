@@ -184,19 +184,6 @@ if not os.path.isfile(basedir + "/histogram.db"):
 	s.close()
 	db.create_all()
 
-# class Histogram(db.Model):
-# 	id = db.Column(db.Integer, primary_key=True)
-# 	_0s = db.Column(db.Integer)
-# 	_10s = db.Column(db.Integer)
-# 	_20s = db.Column(db.Integer)
-# 	_30s = db.Column(db.Integer)
-# 	_40s = db.Column(db.Integer)
-# 	_50s = db.Column(db.Integer)
-# 	_60s = db.Column(db.Integer)
-# 	_70s = db.Column(db.Integer)
-# 	_80s = db.Column(db.Integer)
-# 	_90s = db.Column(db.Integer)
-
 SUPPORTED_LANGS = ["en", "chn"]
 
 def user_completed_experiment():
@@ -231,7 +218,6 @@ def user_code_invalidated():
 
 def persist_initial_state(quiz_data):
 	print "persist_initial_state(quiz_data) being called..."
-	print "flag0"
 	u = User()
 	u.crowdflower = session["crowdflower"]
 	u.consent = session["consent"]
@@ -243,23 +229,14 @@ def persist_initial_state(quiz_data):
 	u.native_lang = session["native_lang"]
 	u.valid = False
 	u.confirmed = False
-	print "flag0.33"
-	try:
-		db.session.add(u)
-	except:
-		traceback.print_exc()
-	print "flag0.66"
-	print "flag0.85"
+	db.session.add(u)
 	try:
 		db.session.commit()
 	except:
 		traceback.print_exc()
-	print "flag0.7"
 	session["id"] = u.id
-	print "flag0.75"
 	u.confirmation_code = gen_rand_code(session["id"])
 	db.session.commit()
-	print "flag1"
 
 	q = Quiz()
 	q.user_id = session["id"]
@@ -269,10 +246,8 @@ def persist_initial_state(quiz_data):
 		for j in xrange(4):
 			setattr(q, "q" + str(i+1) + "_c" + str(j+1), choices[j])
 	q.t_started = datetime.datetime.now()
-	print "flag3"
 	db.session.add(q)
 	db.session.commit()
-	print "flag2"
 
 # Routing
 def redirect_appropriately():
@@ -329,7 +304,6 @@ def get_next_module():
 
 @app.route("/", methods=["GET"])
 def index():
-	print dict(session)
 	if user_completed_quiz():
 		return redirect(url_for("get_results"))
 	elif user_started_quiz():
@@ -508,15 +482,10 @@ def quiz():
 	elif user_completed_quiz():
 		return redirect(url_for("results"))
 	quiz_data = get_quiz_data(session.get("id"))
-	print "NEW THING!"
-	print "Obtained cached quiz_data..."
-	print "quiz_data:", quiz_data
 	if not quiz_data:
 		quiz_data = generate_quiz_data()
 		persist_initial_state(quiz_data)
-	print "about to instantiate session var"
 	session["quiz_started"] = True
-	print "quiz_data:", quiz_data
 	return render_template("quiz.html", quiz_data=quiz_data,
 	 									code_to_name=ISO_CODE_TO_COUNTRY_NAME,
 	 									lang=session.get("lang"),
@@ -571,14 +540,6 @@ def submit_quiz():
 	pct_correct = int(float(num_correct)*100/22)
 	session["pct_correct"] = pct_correct
 	try:
-		# histogram = Histogram.query.filter_by(id=1).first()
-		# h_k = int(math.floor(pct_correct/10) * 10)
-		# if h_k == 100:
-		# 	h_k = "_90s"
-		# else:
-		# 	h_k = "_" + str(h_k) + "s"
-		# setattr(histogram, h_k, getattr(histogram, h_k) + 1)
-
 		basedir = os.path.dirname(os.path.abspath(__file__))
 		shelf = shelve.open(basedir + "/histogram.db")
 		shelf_k = int(math.floor(pct_correct/10) * 10)
@@ -641,11 +602,6 @@ def get_results():
 		for i in xrange(10):
 			h_k = str(i*10) + "s"
 			histogram_d[h_k] = histogram[h_k]
-		# histogram = Histogram.query.filter_by(id=1).first()
-		# histogram_d = {}
-		# for i in xrange(10):
-		# 	h_k = "_" + str(i*10) + "s"
-		# 	histogram_d[h_k] = getattr(histogram, h_k)
 		in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
 		return render_template("results.html", pct_correct=session["pct_correct"],
 											   num_correct=str(num_correct),
@@ -668,7 +624,6 @@ def error():
 @app.route('/confirm_quiz_completion/', methods=['POST'])
 @cross_origin()
 def confirm_quiz_completion():
-	print "Server is getting the confirm quiz completion request..."
 	data = request.get_json()
 	if "confirmation_code" not in data:
 		return jsonify({"success": False})
@@ -687,9 +642,7 @@ def confirm_quiz_completion():
 		return jsonify({'success': False})
 
 def get_quiz_data(uid):
-	print "get_quiz_data is being called..."
 	result = Quiz.query.filter_by(user_id=uid).first()
-	print "successfully queried quiz table..."
 	quiz_data = None
 	if result:
 		lang = session.get("lang")
@@ -703,7 +656,6 @@ def get_quiz_data(uid):
 	return quiz_data
 
 def generate_quiz_data():
-	print "generate_quiz_data is being called..."
 	quiz_data = []
 	available_stories = {}
 	for domain in DOMAIN_TO_STORIES:
@@ -732,7 +684,6 @@ def generate_quiz_data():
 	random.shuffle(quiz_data)
 	quiz_data.insert(6, {"story_id": 305, "story": (STORIES[305][lang]).decode("utf-8"), "choices": ["usa", "cod", "vnm", "pak"]})
 	quiz_data.insert(15, {"story_id": 306, "story": (STORIES[306][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
-	print "quiz_data: ", quiz_data
 	return quiz_data
 
 if __name__ == '__main__':
