@@ -23,15 +23,6 @@ db = SQLAlchemy(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-basedir = os.path.dirname(os.path.abspath(__file__))
-if not os.path.isfile(basedir + "/histogram.db"):
-	s = shelve.open(basedir + "/histogram.db")
-	for i in xrange(10):
-		shelf_k = str(i*10) + "s"
-		s[shelf_k] = 0
-	s.close()
-	db.create_all()
-
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	crowdflower = db.Column(db.Boolean)
@@ -183,6 +174,15 @@ class Quiz(db.Model):
 	q22_ans = db.Column(db.String(8), nullable=True)
 	t_started = db.Column(db.DateTime)
 	t_submitted = db.Column(db.DateTime, nullable=True)
+
+basedir = os.path.dirname(os.path.abspath(__file__))
+if not os.path.isfile(basedir + "/histogram.db"):
+	s = shelve.open(basedir + "/histogram.db")
+	for i in xrange(10):
+		shelf_k = str(i*10) + "s"
+		s[shelf_k] = 0
+	s.close()
+	db.create_all()
 
 # class Histogram(db.Model):
 # 	id = db.Column(db.Integer, primary_key=True)
