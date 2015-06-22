@@ -231,6 +231,7 @@ def user_code_invalidated():
 
 def persist_initial_state(quiz_data):
 	print "persist_initial_state(quiz_data) being called..."
+	print "flag0"
 	u = User()
 	u.crowdflower = session["crowdflower"]
 	u.consent = session["consent"]
