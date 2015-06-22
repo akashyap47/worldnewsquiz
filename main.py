@@ -244,7 +244,10 @@ def persist_initial_state(quiz_data):
 	u.valid = False
 	u.confirmed = False
 	print "flag0.33"
-	db.session.add(u)
+	try:
+		db.session.add(u)
+	except:
+		traceback.print_exc()
 	print "flag0.66"
 	print "flag0.85"
 	db.session.commit()
