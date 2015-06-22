@@ -492,6 +492,7 @@ def quiz():
 	elif user_completed_quiz():
 		return redirect(url_for("results"))
 	quiz_data = get_quiz_data(session.get("id"))
+	print "Obtained cached quiz_data..."
 	if not quiz_data:
 		quiz_data = generate_quiz_data()
 		persist_initial_state(quiz_data)
@@ -668,7 +669,9 @@ def confirm_quiz_completion():
 		return jsonify({'success': False})
 
 def get_quiz_data(uid):
+	print "get_quiz_data is being called..."
 	result = Quiz.query.filter_by(user_id=uid).first()
+	print "successfully queried quiz table..."
 	quiz_data = None
 	if result:
 		lang = session.get("lang")
