@@ -250,7 +250,10 @@ def persist_initial_state(quiz_data):
 		traceback.print_exc()
 	print "flag0.66"
 	print "flag0.85"
-	db.session.commit()
+	try:
+		db.session.commit()
+	except:
+		traceback.print_exc()
 	print "flag0.7"
 	session["id"] = u.id
 	print "flag0.75"
