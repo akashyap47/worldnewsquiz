@@ -494,6 +494,7 @@ def quiz():
 		return redirect(url_for("results"))
 	quiz_data = get_quiz_data(session.get("id"))
 	print "Obtained cached quiz_data..."
+	print "quiz_data:", quiz_data
 	if not quiz_data:
 		quiz_data = generate_quiz_data()
 		persist_initial_state(quiz_data)
