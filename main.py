@@ -25,7 +25,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 if not os.path.isfile(basedir + "/histogram.db"):
-	s = shelve.open(basedir + "/histogram")
+	s = shelve.open(basedir + "/histogram.db")
 	for i in xrange(10):
 		shelf_k = str(i*10) + "s"
 		s[shelf_k] = 0
@@ -560,7 +560,7 @@ def submit_quiz():
 		# setattr(histogram, h_k, getattr(histogram, h_k) + 1)
 
 		basedir = os.path.dirname(os.path.abspath(__file__))
-		shelf = shelve.open(basedir + "/histogram")
+		shelf = shelve.open(basedir + "/histogram.db")
 		shelf_k = int(math.floor(pct_correct/10) * 10)
 		if shelf_k == 100:
 			shelf_k = "90s"
@@ -617,7 +617,7 @@ def get_results():
 			if ans == STORIES[story_id]["country"]:
 				num_correct += 1
 		basedir = os.path.dirname(os.path.abspath(__file__))
-		histogram = shelve.open(basedir + "/histogram")
+		histogram = shelve.open(basedir + "/histogram.db")
 		histogram_d = {}
 		for i in xrange(10):
 			h_k = str(i*10) + "s"
