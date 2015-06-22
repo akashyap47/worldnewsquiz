@@ -23,7 +23,8 @@ db = SQLAlchemy(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-if not os.path.isfile("histogram.db"):
+basedir = os.path.dirname(os.path.abspath(__file__))
+if not os.path.isfile(basedir + "/histogram.db"):
 	s = shelve.open("histogram")
 	for i in xrange(10):
 		shelf_k = str(i*10) + "s"
