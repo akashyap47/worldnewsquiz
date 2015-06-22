@@ -243,9 +243,12 @@ def persist_initial_state(quiz_data):
 	u.native_lang = session["native_lang"]
 	u.valid = False
 	u.confirmed = False
+	print "flag0.33"
 	db.session.add(u)
+	print "flag0.66"
 	db.session.commit()
 	session["id"] = u.id
+	print "flag0.75"
 	u.confirmation_code = gen_rand_code(session["id"])
 	db.session.commit()
 	print "flag1"
