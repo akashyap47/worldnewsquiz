@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ strings_d["World News Quiz"][lang] }} - {{ strings_d["Complete"][lang] }}</title>
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/confirmation.css') }}">
+</head>
+
+<body>
+	<div class="container-fluid" id="main_container">
+	<h3 id='error_title'>{{ strings_d["Thank you!"][lang] }}</h3>
+	<div id='completion_explanation'>
+		{{ strings_d["Thank you for completing the World News Quiz. To get credit for completing the study, please paste the following confirmation code into the appropriate text field of the job in order to confirm completion of the job."][lang] }}
+	</div>
+	<br>
+	<br>
+	<div class="well well-sm" id='confirmation_code'>
+		{{ confirmation_code }}
+	</div>
+	<br>
+	<br>
+	<div id='contact_info'>
+		{{ strings_d['If you have any questions about the study, please email Anu Kashyap at akashyap@mit.edu and Erhardt Graeff at erhardt@media.mit.edu. Additionally, if you feel you have been treated unfairly, or you have questions regarding your rights as a research subject, you may contact the Chairman of the Committee on the Use of Humans as Experimental Subjects, MIT, Room E25-143B, 77 Massachusetts Ave, Cambridge, MA 02139, Phone 1-617-253-6787.'][lang] }}
+	</div>
+	</div>
+</body>
+
+</html>

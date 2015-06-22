@@ -1,0 +1,24 @@
+#basic_info_instructions {
+	margin-top: 30px;
+	font-size: 37.5px;
+	line-height: 43.75px;
+	text-align: center;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#demographics_form {
+	margin-top: 15px;
+	text-align: center;
+}
+
+#demographics_form table {
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#demographics_form select {
+	width: 218px;
+}

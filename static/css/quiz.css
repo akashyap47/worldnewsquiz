@@ -1,0 +1,55 @@
+#quiz_title {
+	margin-top: 30px;
+	font-size: 37.5px;
+	line-height: 43.75px;
+	text-align: center;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#quiz_instructions {
+	margin-top: 20px;
+	font-size: 20px;
+	text-align: center;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#quiz_instructions2 {
+	margin-top: 10px;
+}
+
+#quiz_form {
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#quiz_form td {
+	padding: 15px;
+}
+
+.choice_buttons {
+	margin-top: 10px;
+}
+
+.choice_buttons input {
+	margin-right: 5px;
+}
+
+#quiz_form table {
+	margin-bottom: 0px;
+}
+
+#quiz_form .btn {
+	margin-bottom: 25px;
+}
+
+body div#footer {
+	position: absolute;
+	right: 15px;
+	bottom: initial;
+	margin-bottom: 10px;
+}

@@ -1,0 +1,32 @@
+#study_end_title {
+	margin-top: 30px;
+	font-size: 37.5px;
+	line-height: 43.75px;
+	text-align: center;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#study_end_explanation {
+	margin-top: 15px;
+	font-size: 25px;
+	text-align: center;
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#get_consent_page_btn {
+	display: block;
+	margin-top: 40px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#contact_info {
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}

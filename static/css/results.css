@@ -1,0 +1,113 @@
+#bar {
+	height: 150px;
+	margin-left: 22.5px;
+	margin-top: 15px;
+	width: 300px;
+}
+
+#result {
+	font-size: 24px;
+}
+
+#result_box {
+	margin-top: 30px;
+	/*
+	BELOW IS NEW:;
+	*/
+	/*width: 350px;
+	display: inline-block;*/
+	width: 775px;
+	margin-left: 60px;
+	margin-right: auto;
+}
+
+#percent_and_sentence {
+	display: inline-block;
+	width: 400px;
+	margin-right: 25px;
+	text-align: center;
+}
+
+#percent {
+	font-size: 72px;
+}
+
+#percent_and_sentence text {
+	color: #9245AB;
+}
+
+#percentile {
+	display: inline-block;
+}
+
+#percentile_statement {
+	text-align: center;
+	margin-top: 0px;
+	margin-left: 35px;
+}
+
+#sharing_box {
+	/*display: inline-block;*/
+	/*width: 350px;/**/
+	/*margin-left: 150px;*/
+}
+
+#thanks_en {
+	font-size: 16px;
+	margin-left: 70px;
+	/*text-align: center;*/
+}
+
+#thanks_chn {
+	font-size: 16px;
+	margin-left: 145px;
+}
+
+#read_up {
+	font-size: 18px;
+	text-align: center;
+	margin-top: 45px;
+}
+
+a {
+	/*font-family: Arial;*/
+	text-decoration: underline;
+}
+
+body .fb-share-button {
+	-webkit-animation: fadein 2s;
+	-moz-animation: fadein 2s;
+	-ms-animation: fadein 2s;
+	-o-animation: fadein 2s;
+	animation: fadein 2s;
+	line-height: 10px;
+}
+
+body .twitter-share-button {
+	-webkit-animation: fadein 2s;
+	-moz-animation: fadein 2s;
+	-ms-animation: fadein 2s;
+	-o-animation: fadein 2s;
+	animation: fadein 2s;
+	line-height: 10px;
+}
+
+.sharing_buttons {
+	width: 125px;
+	margin-left: 390px;
+	margin-right: auto;
+	margin-top: 20px;
+	transform: scale(1.5);
+}
+
+#sharing_buttons_chn {
+	margin-left: 410px;
+}
+
+#sharing_well {
+	text-align: center;
+	margin-top: 15px;
+	margin-left: 25px;
+	margin-right: auto;
+	width: 850px;
+}

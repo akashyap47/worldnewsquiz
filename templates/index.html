@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>World News Quiz | 世界新闻问答</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+		<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+		{% if is_var %}
+		<meta property="og:url" content="http://gboqt.herokuapp.com/?variant=true" />
+		<meta property="og:title" content="World News Quiz VARIANT" />
+		{% else %}
+		<meta property="og:url" content="http://gboqt.herokuapp.com/" />
+		<meta property="og:title" content="World News Quiz" />
+		{% endif %}
+		<meta property="og:description" content="Think you know what's going on around the world? Test your knowledge with a quiz developed at MIT!" />
+		<meta property="og:image" content="http://upload.wikimedia.org/wikipedia/commons/1/17/BlankMap-World-noborders.png" />
+	</head>
+	<body>
+		<div ng-app="gbOqtApp">
+			<div class="container-fluid" id="main_container">
+				<div class="row" id="splash-hook1-row">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-4 splash-hook1" id="splash-hook1-en">
+						Think you know what's going on around the <text>world</text>?
+					</div>
+					<div class="col-sm-2"></div>
+					<div class="col-sm-4 splash-hook1" id="splash-hook1-chn">
+						对<text>世界</text>新闻很熟悉？
+					</div>
+					<div class="col-sm-1"></div>
+				</div>
+				<div class="row" id="splash-hook2-row">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-4 splash-hook2" id="splash-hook2-en">
+						Test your knowledge with a quiz developed at MIT!
+					</div>
+					<div class="col-sm-2"></div>
+					<div class="col-sm-4 splash-hook2" id="splash-hook2-chn">
+						用MIT开发的工具测测您的世界新闻知识！
+					</div>
+					<div class="col-sm-1"></div>
+				</div>
+				<div class="row" id="get-lang-row">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-4 get-lang-text" id="get-lang-text-en">
+						But first, are you a native English speaker?
+					</div>
+					<div class="col-sm-2"></div>
+					<div class="col-sm-4 get-lang-text" id="get-lang-text-chn">
+						首先请问，中文是不是您的母语？
+					</div>
+					<div class="col-sm-1"></div>
+				</div>
+				<div ng-controller="LangCtrl">
+					<div class="row" id="lang-form-row">
+						<div class="col-sm-1"></div>
+						<div class="col-sm-4 lang-form" id="lang-form-en">
+					        <input ng-click="setLang('en')" class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" value="Yes, I am!" />
+						</div>
+						<div class="col-sm-2"></div>
+						<div class="col-sm-4 lang-form" id="lang-form-chn">
+					        <input ng-click="setLang('chn')" class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" value="是的！" />
+						</div>
+						<div class="col-sm-1"></div>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+			By the Center for Civic Media @ MIT Media Lab, 2015.
+			</div>
+		</div>
+	</body>
+</html>
