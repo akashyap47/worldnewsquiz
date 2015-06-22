@@ -23,6 +23,14 @@ db = SQLAlchemy(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+if not os.path.isfile("histogram.db"):
+	s = shelve.open("histogram")
+	for i in xrange(10):
+		shelf_k = str(i*10) + "s"
+		s[shelf_k] = 0
+	s.close()
+	db.create_all()
+
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	crowdflower = db.Column(db.Boolean)
