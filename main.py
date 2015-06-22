@@ -559,7 +559,8 @@ def submit_quiz():
 		# 	h_k = "_" + str(h_k) + "s"
 		# setattr(histogram, h_k, getattr(histogram, h_k) + 1)
 
-		shelf = shelve.open("histogram")
+		basedir = os.path.dirname(os.path.abspath(__file__))
+		shelf = shelve.open(basedir + "/histogram")
 		shelf_k = int(math.floor(pct_correct/10) * 10)
 		if shelf_k == 100:
 			shelf_k = "90s"
@@ -615,7 +616,8 @@ def get_results():
 			ans = getattr(result, "q" + str(i+1) + "_ans")
 			if ans == STORIES[story_id]["country"]:
 				num_correct += 1
-		histogram = shelve.open("histogram")
+		basedir = os.path.dirname(os.path.abspath(__file__))
+		histogram = shelve.open(basedir + "/histogram")
 		histogram_d = {}
 		for i in xrange(10):
 			h_k = str(i*10) + "s"
