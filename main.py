@@ -568,7 +568,6 @@ def submit_quiz():
 		else:
 			shelf_k = str(shelf_k) + "s"
 		shelf[shelf_k] += 1
-		shelf["total"] += 1
 		shelf.close()
 		db.session.commit()
 	except Exception, err:
