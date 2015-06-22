@@ -230,6 +230,7 @@ def user_code_invalidated():
 		   (user_bad_demographics() or session.get("consent") == False))
 
 def persist_initial_state(quiz_data):
+	print "persist_initial_state(quiz_data) being called..."
 	u = User()
 	u.crowdflower = session["crowdflower"]
 	u.consent = session["consent"]
@@ -684,6 +685,7 @@ def get_quiz_data(uid):
 	return quiz_data
 
 def generate_quiz_data():
+	print "generate_quiz_data is being called..."
 	quiz_data = []
 	available_stories = {}
 	for domain in DOMAIN_TO_STORIES:
@@ -712,6 +714,7 @@ def generate_quiz_data():
 	random.shuffle(quiz_data)
 	quiz_data.insert(6, {"story_id": 305, "story": (STORIES[305][lang]).decode("utf-8"), "choices": ["usa", "cod", "vnm", "pak"]})
 	quiz_data.insert(15, {"story_id": 306, "story": (STORIES[306][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
+	print "quiz_data: ", quiz_data
 	return quiz_data
 
 if __name__ == '__main__':
