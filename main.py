@@ -25,7 +25,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 if not os.path.isfile(basedir + "/histogram.db"):
-	s = shelve.open("histogram")
+	s = shelve.open(basedir + "/histogram")
 	for i in xrange(10):
 		shelf_k = str(i*10) + "s"
 		s[shelf_k] = 0
