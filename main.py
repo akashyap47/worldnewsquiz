@@ -247,6 +247,7 @@ def persist_initial_state(quiz_data):
 	db.session.add(u)
 	print "flag0.66"
 	db.session.commit()
+	print "flag0.7"
 	session["id"] = u.id
 	print "flag0.75"
 	u.confirmation_code = gen_rand_code(session["id"])
