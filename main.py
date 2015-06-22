@@ -246,6 +246,7 @@ def persist_initial_state(quiz_data):
 	print "flag0.33"
 	db.session.add(u)
 	print "flag0.66"
+	print "flag0.85"
 	db.session.commit()
 	print "flag0.7"
 	session["id"] = u.id
