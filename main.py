@@ -175,6 +175,8 @@ class Quiz(db.Model):
 	t_started = db.Column(db.DateTime)
 	t_submitted = db.Column(db.DateTime, nullable=True)
 
+POSSIBLE_PCS = [0, 4, 9, 13, 18, 22, 27, 31, 36, 40, 45, 50, 54, 59, 63, 68, 72, 77, 81, 86, 90, 95, 100]
+
 basedir = os.path.dirname(os.path.abspath(__file__))
 if not os.path.isfile(basedir + "/histogram.db"):
 	s = shelve.open(basedir + "/histogram.db")
@@ -324,8 +326,9 @@ def index():
 		else:
 			session["crowdflower"] = False
 			session["experiment_started"] = True
-			if request.args.get("variant") == "true":
-				return render_template("index.html", is_var=True)
+			print request.args.get("pc")
+			# if request.args.get("pc") == "true":
+				# return render_template("index.html", is_var=True)
 			return render_template("index.html", is_var=False)
 
 @app.route("/set_lang/", methods=["POST"])
