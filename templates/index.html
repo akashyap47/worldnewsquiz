@@ -13,13 +13,12 @@
 		<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 		{% if is_var %}
 		<meta property="og:url" content="http://worldnewsquiz-dev.mediameter.org/?pc={{ pc }}" />
-		<meta property="og:title" content="World News Quiz VARIANT" />
 		<meta property="og:image" content="http://i.imgur.com/{{ imgur_hash }}.png" />
 		{% else %}
 		<meta property="og:url" content="http://worldnewsquiz-dev.mediameter.org/" />
-		<meta property="og:title" content="World News Quiz" />
-		<meta property="og:image" content="http://i.imgur.com/9VXJpAO.png" />
+		<meta property="og:image" content="http://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg" />
 		{% endif %}
+		<meta property="og:title" content="World News Quiz" />
 		<meta property="og:description" content="Think you know what's going on around the world? Test your knowledge with a quiz developed at MIT!" />
 	</head>
 	<body>
