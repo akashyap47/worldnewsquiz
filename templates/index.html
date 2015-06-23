@@ -12,14 +12,15 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 		<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 		{% if is_var %}
-		<meta property="og:url" content="http://gboqt.herokuapp.com/?variant=true" />
+		<meta property="og:url" content="http://worldnewsquiz-dev.mediameter.org/?variant=true" />
 		<meta property="og:title" content="World News Quiz VARIANT" />
+		<meta property="og:image" content="i.imgur.com/scfVHm7.png" />
 		{% else %}
-		<meta property="og:url" content="http://gboqt.herokuapp.com/" />
+		<meta property="og:url" content="http://worldnewsquiz-dev.mediameter.org/" />
 		<meta property="og:title" content="World News Quiz" />
+		<meta property="og:image" content="i.imgur.com/9VXJpAO.png" />
 		{% endif %}
 		<meta property="og:description" content="Think you know what's going on around the world? Test your knowledge with a quiz developed at MIT!" />
-		<meta property="og:image" content="http://upload.wikimedia.org/wikipedia/commons/1/17/BlankMap-World-noborders.png" />
 	</head>
 	<body>
 		<div ng-app="gbOqtApp">
