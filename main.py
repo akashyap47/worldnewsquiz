@@ -327,6 +327,8 @@ def index():
 			session["crowdflower"] = False
 			session["experiment_started"] = True
 			print "TEST...SHOULD BE PRINTING THIS!"
+			print request
+			print request.args
 			print request.args.get("pc")
 			# if request.args.get("pc") == "true":
 				# return render_template("index.html", is_var=True)
