@@ -175,8 +175,6 @@ class Quiz(db.Model):
 	t_started = db.Column(db.DateTime)
 	t_submitted = db.Column(db.DateTime, nullable=True)
 
-POSSIBLE_PCS = [0, 4, 9, 13, 18, 22, 27, 31, 36, 40, 45, 50, 54, 59, 63, 68, 72, 77, 81, 86, 90, 95, 100]
-
 basedir = os.path.dirname(os.path.abspath(__file__))
 if not os.path.isfile(basedir + "/histogram.db"):
 	s = shelve.open(basedir + "/histogram.db")
@@ -187,6 +185,32 @@ if not os.path.isfile(basedir + "/histogram.db"):
 	db.create_all()
 
 SUPPORTED_LANGS = ["en", "chn"]
+
+PC_TO_IMGUR_HASH = {
+	0: "3z0Bi0R",
+	4: "GVU0dv4",
+	9: "QrhjrhD",
+	13: "O6mDRS8",
+	18: "rP4wWnq",
+	22: "Kjbufos",
+	27: "sSV4Cdm",
+	31: "UycxQIa",
+	36: "UeU4mSV",
+	40: "QbzOpTP",
+	45: "O41HpsX",
+	50: "scfVHm7",
+	54: "TmmC37W",
+	59: "MjNqu9R",
+	63: "thSUuL9",
+	68: "SpbEDEn",
+	72: "TmnTg1k",
+	77: "OHwBDSa",
+	81: "MhythEs",
+	86: "oqBzrqZ",
+	90: "XSqHtuS",
+	95: "iYec9VZ",
+	100: "9VXJpAO",
+}
 
 def user_completed_experiment():
 	return session.get("experiment_completed")
@@ -326,12 +350,11 @@ def index():
 		else:
 			session["crowdflower"] = False
 			session["experiment_started"] = True
-			print "TEST...SHOULD BE PRINTING THIS!"
-			print request
-			print dict(request.args)
-			print request.args.get("pc")
-			# if request.args.get("pc") == "true":
-				# return render_template("index.html", is_var=True)
+			pc = request.args.get("pc")
+			imgur_hash = None
+			if pc in PC_TO_IMGUR_HASH.keys():
+				imgur_hash = PC_TO_IMGUR_HASH[pc]
+				return render_template("index.html", is_var=True, pc=pc, imgur_hash=imgur_hash)
 			return render_template("index.html", is_var=False)
 
 @app.route("/set_lang/", methods=["POST"])
