@@ -44,7 +44,16 @@
 }
 
 #quiz_form .btn {
+	margin-top: 15px;
 	margin-bottom: 25px;
+}
+
+.i_row {
+	height: 225px;
+}
+
+body #submit_button {
+	display: none;
 }
 
 body div#footer {

@@ -16,6 +16,71 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+    gbOqtApp.controller("QuizCtrl", ["$scope", "$http", function($scope, $http) {
+		$scope.quiz = {
+			'q1_ans': 'na',
+			'q2_ans': 'na',
+			'q3_ans': 'na',
+			'q4_ans': 'na',
+			'q5_ans': 'na',
+			'q6_ans': 'na',
+			'q7_ans': 'na',
+			'q8_ans': 'na',
+			'q9_ans': 'na',
+			'q10_ans': 'na',
+			'q11_ans': 'na',
+			'q12_ans': 'na',
+			'q13_ans': 'na',
+			'q14_ans': 'na',
+			'q15_ans': 'na',
+			'q16_ans': 'na',
+			'q17_ans': 'na',
+			'q18_ans': 'na',
+			'q19_ans': 'na',
+			'q20_ans': 'na',
+			'q21_ans': 'na',
+			'q22_ans': 'na'
+		};
+
+		$scope.lastRendered = 1;
+
+		$scope.submitQuiz = function() {
+			console.log($scope.quiz)
+			$http.post("/submit_quiz/", $scope.quiz).
+			success(function(data, status, headers, config) {
+				// window.location = "http://localhost:5000/" + data["next"] + "/";
+				window.location = "/" + data["next"] + "/";
+			}).
+			error(function(data, status, headers, config) {
+				$scope.submitQuiz();
+			});
+		}
+
+		$scope.renderNextQuestion = function(i) {
+			console.log("i:");
+			console.log(i);
+			if (i != undefined && i + 1 <= $scope.lastRendered) {
+				return;
+			}
+
+			var renderIndex = $scope.lastRendered + 1;
+			var renderIndexString = (renderIndex).toString();
+			// $("#" + renderIndexString + "_row").attr("hidden", false);
+			$("#" + renderIndexString + "_row").fadeIn(100, "swing");
+			console.log($("#" + renderIndexString + "_row").offset().top);
+			$('html,body').animate({
+				scrollTop: $("#" + renderIndexString + "_row").offset().top + 500,
+			}, 1000, "linear");
+			// window.scrollTo(0,document.body.scrollHeight);
+			$scope.lastRendered += 1;
+			if ($scope.lastRendered == 22) {
+				$("#nq_button").css("display", "none");
+				$("#submit_button").css("display", "block").fadeIn(100, "linear");
+			}
+		}
+	}]);
+    </script>
     <title>{{ strings_d["World News Quiz"][lang] }}</title>
 </head>
 <body>
@@ -41,15 +106,19 @@
 			<div id="quiz_form">
 				<table class="table table-striped">
 				{% for quiz_datum in quiz_data %}
-				<tr>
+				{% set i = loop.index %}
+				{% if i == 1 %}
+				<tr id="{{ (i)|string + "_row" }}" class="i_row">
+				{% else %}
+				<tr id="{{ (i)|string + "_row" }}" class="i_row" hidden>
+				{% endif %}
 				<td>
 				<div>
-					{% set i = loop.index %}
 					{{ (loop.index)|string + ".)" }} {{ quiz_datum["story"] }}
 					<br>
 					<div class="choice_buttons">
 						{% for choice in quiz_datum["choices"] %}
-							<input type="radio" ng-model={{ "quiz.q" + (i)|string + "_ans" }} name={{ "q" + (i)|string + "_ans" }} value={{choice}}> {{ strings_d[code_to_name[choice]][lang] }}
+							<input type="radio" ng-click="renderNextQuestion({{ i }})" ng-model={{ "quiz.q" + (i)|string + "_ans" }} name={{ "q" + (i)|string + "_ans" }} value={{choice}}> {{ strings_d[code_to_name[choice]][lang] }}
 							<br>
 						{% endfor %}
 					</div>
@@ -59,7 +128,17 @@
 				<!--<br>-->
 				{% endfor %}
 				</table>
-				<input class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" ng-click="submitQuiz()" value="{{ strings_d["Submit"][lang] }}">
+				<input id="submit_button" class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" ng-click="submitQuiz()" value="{{ strings_d["Submit"][lang] }}"></input>
+				<input id="nq_button" class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" ng-click="renderNextQuestion()" value="Next Question"></input>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 			</div>
 		</div>
 		</div>

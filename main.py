@@ -567,6 +567,7 @@ def submit_quiz():
 	session["readup_countries"] = readup_countries
 
 	pct_correct = int(float(num_correct)*100/22)
+	session["num_correct"] = num_correct
 	session["pct_correct"] = pct_correct
 	try:
 		basedir = os.path.dirname(os.path.abspath(__file__))
@@ -633,7 +634,7 @@ def get_results():
 			histogram_d[h_k] = histogram[h_k]
 		in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
 		return render_template("results.html", pct_correct=session["pct_correct"],
-											   num_correct=str(num_correct),
+											   num_correct=str(session["num_correct"]),
 											   lang=session.get("lang"),
 											   histogram_d = histogram_d,
 											   purple_bar_i = session["pct_correct"]/10,
