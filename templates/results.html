@@ -12,54 +12,19 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-	<!--<script>
-	$(document).ready(function() {
-		Chart.defaults.global["showTooltips"] = false;
+	<script>
+	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
+		$scope.shareOnFacebook = function() {
+			console.log("shareOnFacebook is being called.");
+			window.open("https://facebook.com/sharer/sharer.php?u=http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}", 'Share on Facebook', 'width=672,height=555');
+		}
 
-		var ctx = $("#bar")[0].getContext("2d");
-		var options = {
-			/*scaleOverride: true,
-			scaleStartValue: 0,*/
-			// animation: false,
-			scaleShowGridLines: false,
-			scaleShowLabels: false,
-		};
-		var data = {
-	    	labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
-	    	datasets: [
-		        {
-		            // fillColor: "rgba(146,69,171,0.5)",
-		            // strokeColor: "rgba(146,69,171,0.8)",
-		            // highlightFill: "rgba(146,69,171,0.75)",
-		            // highlightStroke: "rgba(146,69,171,1)",
-		            fillColor: "rgba(128,128,128,0.5)",
-		            strokeColor: "rgba(128,128,128,128)",
-		            highlightFill: "rgba(128,128,128,0.75)",
-		            highlightStroke: "rgba(128,128,128,1)",
-		            data: [{{ histogram_d["_0s"] }},
-		            	   {{ histogram_d["_10s"] }},
-		            	   {{ histogram_d["_20s"] }},
-		            	   {{ histogram_d["_30s"] }},
-		            	   {{ histogram_d["_40s"] }},
-		            	   {{ histogram_d["_50s"] }},
-		            	   {{ histogram_d["_60s"] }},
-		            	   {{ histogram_d["_70s"] }},
-		            	   {{ histogram_d["_80s"] }},
-		            	   {{ histogram_d["_90s"] }}],
-		        },
-	    	],
-		};
-		var percentileChart = new Chart(ctx).Bar(data, options);
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].fillColor = "rgba(146,69,171,0.5)";
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].strokeColor = "rgba(146,69,171,0.8)";
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].highlightFill = "rgba(146,69,171,0.75)";
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].highlightStroke = "rgba(146,69,171,1)";
-		percentileChart.update();
-
-	});
-	</script>-->
-	<!--<script src="{{ url_for('static', filename='js/results.js') }}"></script>-->
-
+		$scope.shareOnTwitter = function() {
+			console.log("shareOnTwitter is being called.");
+			window.open("https://twitter.com/intent/tweet?text=I%20scored%20{{ pct_correct }}%25!%20Test%20your%20World%20News%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!&url=http%3A%2F%2Fworldnewsquiz-dev.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
+		}
+	}]);
+	</script>
 	<title>{{ strings_d["World News Quiz"][lang] }} - {{ strings_d["Your Results!"][lang] }}</title>
 </head>
 
@@ -178,6 +143,7 @@
 	{% endif %}
 	<!--<script src="https://apis.google.com/js/platform.js" defer></script>-->
 
+	<div ng-app="gbOqtApp">
 	<div id="main_container" class="container-fluid">
 	<div id="result_box">
 		<div id="percent_and_sentence">
@@ -231,14 +197,18 @@
 		{% endif %}
 		</div>
 		{% if not in_china %}
+		<div ng-controller="ResultsCtrl">
 		<div class="sharing_buttons" {% if lang == "chn" %} id="sharing_buttons_chn" {% endif %}>
 		
-		<div class="fb-share-button" data-href="http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}" data-layout="button"></div>
+			<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="Share on Facebook"></input>
+			<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="Share on Twitter"></input>
+		<!--<div class="fb-share-button" data-href="http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}" data-layout="button"></div>
 		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://worldnewsquiz-dev.mediameter.org" data-text="I scored {{ pct_correct}}%! Test your World News knowledge with this quiz developed at MIT!" data-count="none" data-hashtags="WorldNewsQuiz" {% if lang == "chn" %} data-lang="zh-cn" {% endif %}>Tweet</a>
-		</div>
+		</div>-->
 		{% else %}
 		<div id="sharing_well" class="well well-sm">
 		<a href="https://gboqt.herokuapp.com">worldnewsquiz.mediameter.org</a>
+		</div>
 		</div>
 		</div>
 		{% endif %}
