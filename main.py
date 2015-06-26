@@ -348,6 +348,7 @@ def index():
 			session["crowdflower"] = True
 			session["lang"] = lang
 			session["experiment_started"] = True
+			print "code is getting here!"
 			return redirect(url_for("get_consent"))
 		else:
 			session["crowdflower"] = False
