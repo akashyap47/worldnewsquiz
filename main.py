@@ -383,7 +383,7 @@ def index():
 					pc = storyv[2:]
 				else:
 					story_lang = "chn"
-					pc = stoyv[3:]
+					pc = storyv[3:]
 				return render_template("index.html", is_var=True, pc=pc, story_lang=story_lang, imgur_hash=imgur_hash)
 			return render_template("index.html", is_var=False)
 
