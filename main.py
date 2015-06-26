@@ -379,7 +379,7 @@ def index():
 				pc = None
 				story_lang = None
 				if storyv[0:2] == "en":
-					story_lang == "en"
+					story_lang = "en"
 					pc = storyv[2:]
 				else:
 					story_lang = "chn"
