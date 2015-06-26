@@ -724,8 +724,8 @@ def generate_quiz_data():
 			random.shuffle(choices)
 			quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
 	random.shuffle(quiz_data)
-	quiz_data.insert(6, {"story_id": 305, "story": (STORIES[305][lang]).decode("utf-8"), "choices": ["usa", "cod", "vnm", "pak"]})
-	quiz_data.insert(15, {"story_id": 306, "story": (STORIES[306][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
+	quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": ["usa", "cod", "vnm", "pak"]})
+	quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
 	return quiz_data
 
 if __name__ == '__main__':
