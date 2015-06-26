@@ -200,8 +200,8 @@
 		<div ng-controller="ResultsCtrl">
 		<div class="sharing_buttons" {% if lang == "chn" %} id="sharing_buttons_chn" {% endif %}>
 		
-			<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="Share on Facebook"></input>
-			<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="Share on Twitter"></input>
+			<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
+			<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
 		<!--<div class="fb-share-button" data-href="http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}" data-layout="button"></div>
 		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://worldnewsquiz-dev.mediameter.org" data-text="I scored {{ pct_correct}}%! Test your World News knowledge with this quiz developed at MIT!" data-count="none" data-hashtags="WorldNewsQuiz" {% if lang == "chn" %} data-lang="zh-cn" {% endif %}>Tweet</a>
 		</div>-->
