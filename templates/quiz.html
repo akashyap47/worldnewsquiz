@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
@@ -46,7 +46,6 @@
 		$scope.lastRendered = 1;
 
 		$scope.submitQuiz = function() {
-			console.log($scope.quiz)
 			$http.post("/submit_quiz/", $scope.quiz).
 			success(function(data, status, headers, config) {
 				// window.location = "http://localhost:5000/" + data["next"] + "/";
@@ -58,8 +57,6 @@
 		}
 
 		$scope.renderNextQuestion = function(i) {
-			console.log("i:");
-			console.log(i);
 			if (i != undefined && i + 1 <= $scope.lastRendered) {
 				return;
 			}
@@ -68,7 +65,6 @@
 			var renderIndexString = (renderIndex).toString();
 			// $("#" + renderIndexString + "_row").attr("hidden", false);
 			$("#" + renderIndexString + "_row").fadeIn(100, "swing");
-			console.log($("#" + renderIndexString + "_row").offset().top);
 			$('html,body').animate({
 				scrollTop: $("#" + renderIndexString + "_row").offset().top + 500,
 			}, 1250, "linear");
