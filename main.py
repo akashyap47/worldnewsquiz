@@ -726,9 +726,11 @@ def generate_quiz_data():
 				quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
 		random.shuffle(quiz_data)
 		c400 = ["usa", "cod", "vnm", "pak"]
+		random.shuffle(c400)
 		c401 = ["chn", "usa", "ind", "deu"]
-		quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": random.shuffle(c400)})
-		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": random.shuffle(c401)})
+		random.shuffle(c401)
+		quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": c400})
+		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": c401})
 		return quiz_data
 	except Exception:
 		print "available_countries:", available_countries
