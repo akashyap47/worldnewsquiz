@@ -187,56 +187,52 @@ if not os.path.isfile(basedir + "/histogram.db"):
 SUPPORTED_LANGS = ["en", "chn"]
 
 PC_TO_IMGUR_HASH = {
-	"en": {
-		"0": "3z0Bi0R",
-		"4": "GVU0dv4",
-		"9": "QrhjrhD",
-		"13": "O6mDRS8",
-		"18": "rP4wWnq",
-		"22": "Kjbufos",
-		"27": "sSV4Cdm",
-		"31": "UycxQIa",
-		"36": "UeU4mSV",
-		"40": "QbzOpTP",
-		"45": "O41HpsX",
-		"50": "scfVHm7",
-		"54": "TmmC37W",
-		"59": "MjNqu9R",
-		"63": "thSUuL9",
-		"68": "SpbEDEn",
-		"72": "TmnTg1k",
-		"77": "OHwBDSa",
-		"81": "MhythEs",
-		"86": "oqBzrqZ",
-		"90": "XSqHtuS",
-		"95": "iYec9VZ",
-		"100": "9VXJpAO",
-	},
-	"chn": {
-		"0": "XI7cANq",
-		"4": "JvYpKg8",
-		"9": "bnECaiI",
-		"13": "qiLVXTz",
-		"18": "P5oT7ww",
-		"22": "GhegrDa",
-		"27": "Tpj2czZ",
-		"31": "Bv6t8w2",
-		"36": "8nf39y5",
-		"40": "zA7EmQv",
-		"45": "5dcKKAE",
-		"50": "nLQGuQp",
-		"54": "RDoTLOL",
-		"59": "oRPGJX1",
-		"63": "NG4C626",
-		"68": "FPf99TX",
-		"72": "XmdrbS4",
-		"77": "SO537jI",
-		"81": "9hio7UD",
-		"86": "FGuoFgW",
-		"90": "9ZdFVw2",
-		"95": "9rqbnBF",
-		"100": "eMprxRJ",
-	},
+	"en0": "3z0Bi0R",
+	"en4": "GVU0dv4",
+	"en9": "QrhjrhD",
+	"en13": "O6mDRS8",
+	"en18": "rP4wWnq",
+	"en22": "Kjbufos",
+	"en27": "sSV4Cdm",
+	"en31": "UycxQIa",
+	"en36": "UeU4mSV",
+	"en40": "QbzOpTP",
+	"en45": "O41HpsX",
+	"en50": "scfVHm7",
+	"en54": "TmmC37W",
+	"en59": "MjNqu9R",
+	"en63": "thSUuL9",
+	"en68": "SpbEDEn",
+	"en72": "TmnTg1k",
+	"en77": "OHwBDSa",
+	"en81": "MhythEs",
+	"en86": "oqBzrqZ",
+	"en90": "XSqHtuS",
+	"en95": "iYec9VZ",
+	"en100": "9VXJpAO",
+	"chn0": "XI7cANq",
+	"chn4": "JvYpKg8",
+	"chn9": "bnECaiI",
+	"chn13": "qiLVXTz",
+	"chn18": "P5oT7ww",
+	"chn22": "GhegrDa",
+	"chn27": "Tpj2czZ",
+	"chn31": "Bv6t8w2",
+	"chn36": "8nf39y5",
+	"chn40": "zA7EmQv",
+	"chn45": "5dcKKAE",
+	"chn50": "nLQGuQp",
+	"chn54": "RDoTLOL",
+	"chn59": "oRPGJX1",
+	"chn63": "NG4C626",
+	"chn68": "FPf99TX",
+	"chn72": "XmdrbS4",
+	"chn77": "SO537jI",
+	"chn81": "9hio7UD",
+	"chn86": "FGuoFgW",
+	"chn90": "9ZdFVw2",
+	"chn95": "9rqbnBF",
+	"chn100": "eMprxRJ",
 }
 
 def user_completed_experiment():
@@ -376,11 +372,18 @@ def index():
 		else:
 			session["crowdflower"] = False
 			session["experiment_started"] = True
-			pc = request.args.get("pc")
-			story_lang = request.args.get("story_lang")
+			storyv = request.args.get("storyv")
 			imgur_hash = None
-			if story_lang in SUPPORTED_LANGS and pc in (PC_TO_IMGUR_HASH[story_lang]).keys():
-				imgur_hash = PC_TO_IMGUR_HASH[story_lang][pc]
+			if storyv in PC_TO_IMGUR_HASH.keys():
+				imgur_hash = PC_TO_IMGUR_HASH[storyv]
+				pc = None
+				story_lang = None
+				if storyv[0:2] == "en":
+					story_lang == "en"
+					pc = storyv[2:]
+				else:
+					story_lang = "chn"
+					pc = stoyv[3:]
 				return render_template("index.html", is_var=True, pc=pc, story_lang=story_lang, imgur_hash=imgur_hash)
 			return render_template("index.html", is_var=False)
 

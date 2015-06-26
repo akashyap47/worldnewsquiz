@@ -15,7 +15,7 @@
 	<script>
 	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
 		$scope.shareOnFacebook = function() {
-			window.open("https://facebook.com/sharer/sharer.php?u=http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}&story_lang={{ lang }}", 'Share on Facebook', 'width=672,height=555');
+			window.open("https://facebook.com/sharer/sharer.php?u=http://worldnewsquiz-dev.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook', 'width=672,height=555');
 		}
 
 		$scope.shareOnTwitter = function() {
