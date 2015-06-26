@@ -698,35 +698,38 @@ def get_quiz_data(uid):
 	return quiz_data
 
 def generate_quiz_data():
-	quiz_data = []
-	available_stories = {}
-	for domain in DOMAIN_TO_STORIES:
-		available_stories[domain] = {"Positive": [], "Negative": []}
-		for valence in ["Positive", "Negative"]:
-			for story_id in DOMAIN_TO_STORIES[domain][valence]:
-				available_stories[domain][valence].append(story_id)
+	try:
+		quiz_data = []
+		available_stories = {}
+		for domain in DOMAIN_TO_STORIES:
+			available_stories[domain] = {"Positive": [], "Negative": []}
+			for valence in ["Positive", "Negative"]:
+				for story_id in DOMAIN_TO_STORIES[domain][valence]:
+					available_stories[domain][valence].append(story_id)
 
-	lang = session.get("lang")
-	for domain in DOMAINS:
-		for i in xrange(2):
-			story_id = None
-			choices = []
-			if random.random() < 0.5:
-				story_id = random.choice(available_stories[domain]["Positive"])
-				available_stories[domain]["Positive"].remove(story_id)
-			else:
-				story_id = random.choice(available_stories[domain]["Negative"])
-				available_stories[domain]["Negative"].remove(story_id)
-			choices.append(STORIES[story_id]["country"])
-			available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
-			available_countries.remove(STORIES[story_id]["country"])
-			choices += random.sample(available_countries, 3)
-			random.shuffle(choices)
-			quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
-	random.shuffle(quiz_data)
-	quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": ["usa", "cod", "vnm", "pak"]})
-	quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
-	return quiz_data
+		lang = session.get("lang")
+		for domain in DOMAINS:
+			for i in xrange(2):
+				story_id = None
+				choices = []
+				if random.random() < 0.5:
+					story_id = random.choice(available_stories[domain]["Positive"])
+					available_stories[domain]["Positive"].remove(story_id)
+				else:
+					story_id = random.choice(available_stories[domain]["Negative"])
+					available_stories[domain]["Negative"].remove(story_id)
+				choices.append(STORIES[story_id]["country"])
+				available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
+				available_countries.remove(STORIES[story_id]["country"])
+				choices += random.sample(available_countries, 3)
+				random.shuffle(choices)
+				quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
+		random.shuffle(quiz_data)
+		quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": ["usa", "cod", "vnm", "pak"]})
+		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
+		return quiz_data
+	except Exception:
+		traceback.print_exc()
 
 if __name__ == '__main__':
 	if not os.path.isfile("histogram.db"):
