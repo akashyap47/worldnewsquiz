@@ -381,7 +381,7 @@ def index():
 			print "pc:", pc
 			print "story_lang:", story_lang
 			imgur_hash = None
-			if pc in PC_TO_IMGUR_HASH.keys() and story_lang in SUPPORTED_LANGS:
+			if story_lang in SUPPORTED_LANGS and pc in (PC_TO_IMGUR_HASH[story_lang]).keys():
 				print "CODE PATH GOES HERE1"
 				imgur_hash = PC_TO_IMGUR_HASH[story_lang][pc]
 				return render_template("index.html", is_var=True, pc=pc, story_lang=story_lang, imgur_hash=imgur_hash)
