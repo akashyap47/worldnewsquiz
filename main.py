@@ -378,6 +378,8 @@ def index():
 			session["experiment_started"] = True
 			pc = request.args.get("pc")
 			story_lang = request.args.get("story_lang")
+			print "pc:", pc
+			print "story_lang:", story_lang
 			imgur_hash = None
 			if pc in PC_TO_IMGUR_HASH.keys() and story_lang in SUPPORTED_LANGS:
 				print "CODE PATH GOES HERE1"
