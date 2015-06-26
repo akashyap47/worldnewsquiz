@@ -380,8 +380,10 @@ def index():
 			story_lang = request.args.get("story_lang")
 			imgur_hash = None
 			if pc in PC_TO_IMGUR_HASH.keys() and story_lang in SUPPORTED_LANGS:
+				print "CODE PATH GOES HERE1"
 				imgur_hash = PC_TO_IMGUR_HASH[story_lang][pc]
 				return render_template("index.html", is_var=True, pc=pc, story_lang=story_lang, imgur_hash=imgur_hash)
+			print "CODE PATH GOES HERE2"
 			return render_template("index.html", is_var=False)
 
 @app.route("/set_lang/", methods=["POST"])
