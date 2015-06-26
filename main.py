@@ -569,7 +569,7 @@ def submit_quiz():
 			if correct_ans in available_countries:
 				available_countries.remove(correct_ans)
 	if len(readup_countries) < 3:
-		readup_countries.append(random.sample(available_countries, 3 - len(readup_countries)))
+		readup_countries += random.sample(available_countries, 3 - len(readup_countries))
 	else:
 		readup_countries = random.sample(readup_countries, 3)
 	print "readup countries:", readup_countries
