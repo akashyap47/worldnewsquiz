@@ -131,17 +131,14 @@ body .twitter-share-button {
 	margin-right: auto;
 	transform: scale(1.5);
 	margin-top: 25px;
-	/*border: #ccc solid 1px;
-	display: block;
-	margin-left: 300px;
-	margin-right: auto;
-	transform: scale(1.5);
-	margin-top: 25px;*/
 }
 
 #twitter_share_button:hover {
-	border-color: #bbb;
+	background: -webkit-linear-gradient(#6cb7f0, #3ea1ec);
+	border-color: #6cb7f0 #55acee #3ea1ec;
+	-webkit-box-shadow: inset 0 0 1px #6cb7f0;
+	/*border-color: #bbb;
 	background-color: #d9d9d9;
 	background-image: linear-gradient(#f8f8f8, #d9d9d9);
-	box-shadow: none
+	box-shadow: none*/
 }
