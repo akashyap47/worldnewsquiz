@@ -126,6 +126,7 @@ body .twitter-share-button {
 	background-color: #55acee;
 	background-image: linear-gradient(#55acee,#2795e9);
 	border: none;
+	color: white;
 	display: block;
 	margin-left: 300px;
 	margin-right: auto;
