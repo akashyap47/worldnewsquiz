@@ -708,32 +708,23 @@ def generate_quiz_data():
 					available_stories[domain][valence].append(story_id)
 
 		lang = session.get("lang")
-		# for domain in DOMAINS:
-		# 	for i in xrange(2):
-		# 		story_id = None
-		# 		choices = []
-		# 		if random.random() < 0.5:
-		# 			story_id = random.choice(available_stories[domain]["Positive"])
-		# 			available_stories[domain]["Positive"].remove(story_id)
-		# 		else:
-		# 			story_id = random.choice(available_stories[domain]["Negative"])
-		# 			available_stories[domain]["Negative"].remove(story_id)
-		# 		choices.append(STORIES[story_id]["country"])
-		# 		available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
-		# 		available_countries.remove(STORIES[story_id]["country"])
-		# 		choices += random.sample(available_countries, 3)
-		# 		random.shuffle(choices)
-		# 		quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
-
-		qnums = [304, 305, 306, 307, 308, 309, 52, 177, 155, 218, 302, 303, 162, 186, 22, 54, 127, 310, 4, 39, 100, 311, 318, 312, 300, 301, 313, 314, 63, 196, 219, 315, 23, 316, 7, 111, 91, 317, 40, 101]
-		for i in xrange(20):
-			available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
-			available_countries.remove(STORIES[qnums[i]]["country"])
-			choices = [STORIES[qnums[i]]["country"]]
-			choices += random.sample(available_countries, 3)
-			quiz_data.append({"story_id": qnums[i], "story": (STORIES[qnums[i]][lang]).decode("utf-8"), "choices": choices})
-
-		# random.shuffle(quiz_data)
+		for domain in DOMAINS:
+			for i in xrange(2):
+				story_id = None
+				choices = []
+				if random.random() < 0.5:
+					story_id = random.choice(available_stories[domain]["Positive"])
+					available_stories[domain]["Positive"].remove(story_id)
+				else:
+					story_id = random.choice(available_stories[domain]["Negative"])
+					available_stories[domain]["Negative"].remove(story_id)
+				choices.append(STORIES[story_id]["country"])
+				available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
+				available_countries.remove(STORIES[story_id]["country"])
+				choices += random.sample(available_countries, 3)
+				random.shuffle(choices)
+				quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
+		random.shuffle(quiz_data)
 		quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": ["usa", "cod", "vnm", "pak"]})
 		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
 		return quiz_data
