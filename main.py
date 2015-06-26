@@ -187,29 +187,56 @@ if not os.path.isfile(basedir + "/histogram.db"):
 SUPPORTED_LANGS = ["en", "chn"]
 
 PC_TO_IMGUR_HASH = {
-	"0": "3z0Bi0R",
-	"4": "GVU0dv4",
-	"9": "QrhjrhD",
-	"13": "O6mDRS8",
-	"18": "rP4wWnq",
-	"22": "Kjbufos",
-	"27": "sSV4Cdm",
-	"31": "UycxQIa",
-	"36": "UeU4mSV",
-	"40": "QbzOpTP",
-	"45": "O41HpsX",
-	"50": "scfVHm7",
-	"54": "TmmC37W",
-	"59": "MjNqu9R",
-	"63": "thSUuL9",
-	"68": "SpbEDEn",
-	"72": "TmnTg1k",
-	"77": "OHwBDSa",
-	"81": "MhythEs",
-	"86": "oqBzrqZ",
-	"90": "XSqHtuS",
-	"95": "iYec9VZ",
-	"100": "9VXJpAO",
+	"en": {
+		"0": "3z0Bi0R",
+		"4": "GVU0dv4",
+		"9": "QrhjrhD",
+		"13": "O6mDRS8",
+		"18": "rP4wWnq",
+		"22": "Kjbufos",
+		"27": "sSV4Cdm",
+		"31": "UycxQIa",
+		"36": "UeU4mSV",
+		"40": "QbzOpTP",
+		"45": "O41HpsX",
+		"50": "scfVHm7",
+		"54": "TmmC37W",
+		"59": "MjNqu9R",
+		"63": "thSUuL9",
+		"68": "SpbEDEn",
+		"72": "TmnTg1k",
+		"77": "OHwBDSa",
+		"81": "MhythEs",
+		"86": "oqBzrqZ",
+		"90": "XSqHtuS",
+		"95": "iYec9VZ",
+		"100": "9VXJpAO",
+	},
+	"chn": {
+		"0": "XI7cANq",
+		"4": "JvYpKg8",
+		"9": "bnECaiI",
+		"13": "qiLVXTz",
+		"18": "P5oT7ww",
+		"22": "GhegrDa",
+		"27": "Tpj2czZ",
+		"31": "Bv6t8w2",
+		"36": "8nf39y5",
+		"40": "zA7EmQv",
+		"45": "5dcKKAE",
+		"50": "nLQGuQp",
+		"54": "RDoTLOL",
+		"59": "oRPGJX1",
+		"63": "NG4C626",
+		"68": "FPf99TX",
+		"72": "XmdrbS4",
+		"77": "SO537jI",
+		"81": "9hio7UD",
+		"86": "FGuoFgW",
+		"90": "9ZdFVw2",
+		"95": "9rqbnBF",
+		"100": "eMprxRJ",
+	},
 }
 
 def user_completed_experiment():
@@ -243,7 +270,6 @@ def user_code_invalidated():
 		   (user_bad_demographics() or session.get("consent") == False))
 
 def persist_initial_state(quiz_data):
-	print "persist_initial_state(quiz_data) being called..."
 	u = User()
 	u.crowdflower = session["crowdflower"]
 	u.consent = session["consent"]
@@ -330,8 +356,6 @@ def get_next_module():
 
 @app.route("/", methods=["GET"])
 def index():
-	print "is_crowdflower:", request.args.get("crowdflower")
-	print "lang:", request.args.get("lang")
 	if user_completed_quiz():
 		return redirect(url_for("get_results"))
 	elif user_started_quiz():
@@ -348,17 +372,16 @@ def index():
 			session["crowdflower"] = True
 			session["lang"] = lang
 			session["experiment_started"] = True
-			print "code is getting here!"
 			return redirect(url_for("get_consent"))
 		else:
-			print "code is getting here2!!!!"
 			session["crowdflower"] = False
 			session["experiment_started"] = True
 			pc = request.args.get("pc")
+			story_lang = request.args.get("story_lang")
 			imgur_hash = None
-			if pc in PC_TO_IMGUR_HASH.keys():
-				imgur_hash = PC_TO_IMGUR_HASH[pc]
-				return render_template("index.html", is_var=True, pc=pc, imgur_hash=imgur_hash)
+			if pc in PC_TO_IMGUR_HASH.keys() and story_lang in SUPPORTED_LANGS:
+				imgur_hash = PC_TO_IMGUR_HASH[story_lang][pc]
+				return render_template("index.html", is_var=True, pc=pc, story_lang=story_lang, imgur_hash=imgur_hash)
 			return render_template("index.html", is_var=False)
 
 @app.route("/set_lang/", methods=["POST"])
@@ -572,7 +595,6 @@ def submit_quiz():
 		readup_countries += random.sample(available_countries, 3 - len(readup_countries))
 	else:
 		readup_countries = random.sample(readup_countries, 3)
-	print "readup countries:", readup_countries
 	session["readup_countries"] = readup_countries
 
 	pct_correct = int(float(num_correct)*100/22)
@@ -631,7 +653,6 @@ def get_results():
 		num_correct = 0
 		for i in xrange(22):
 			story_id = getattr(result, "q" + str(i+1) + "_sid")
-			print "story_id:", story_id
 			ans = getattr(result, "q" + str(i+1) + "_ans")
 			if ans == STORIES[story_id]["country"]:
 				num_correct += 1
@@ -733,9 +754,6 @@ def generate_quiz_data():
 		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": c401})
 		return quiz_data
 	except Exception:
-		print "available_countries:", available_countries
-		print "story_id:", story_id
-		print "country:", STORIES[story_id]["country"]
 		traceback.print_exc()
 
 if __name__ == '__main__':

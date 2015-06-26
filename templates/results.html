@@ -15,12 +15,10 @@
 	<script>
 	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
 		$scope.shareOnFacebook = function() {
-			console.log("shareOnFacebook is being called.");
-			window.open("https://facebook.com/sharer/sharer.php?u=http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}", 'Share on Facebook', 'width=672,height=555');
+			window.open("https://facebook.com/sharer/sharer.php?u=http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}&story_lang={{ lang }}", 'Share on Facebook', 'width=672,height=555');
 		}
 
 		$scope.shareOnTwitter = function() {
-			console.log("shareOnTwitter is being called.");
 			{% if lang == "en" %}
 			window.open("https://twitter.com/intent/tweet?text=I%20scored%20{{ pct_correct }}%25!%20Test%20your%20World%20News%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!&url=http%3A%2F%2Fworldnewsquiz-dev.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
 			{% else %}

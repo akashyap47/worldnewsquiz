@@ -4,8 +4,6 @@ gbOqtApp.controller("LangCtrl", ["$scope", "$http", function($scope, $http) {
 	$scope.setLang = function(lang) {
 		$http.post("/set_lang/", {"lang": lang}).
 		success(function(data, status, headers, config) {
-			console.log(data);
-			// window.location = "http://localhost:5000/" + data["next"] + "/";
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
@@ -19,7 +17,6 @@ gbOqtApp.controller("ConsentCtrl", ["$scope", "$http", function($scope, $http) {
 	$scope.setConsent = function(consent) {
 		$http.post("/set_consent/", {"consent": consent}).
 		success(function(data, status, headers, config) {
-			// window.location = "http://localhost:5000/" + data["next"] + "/";
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
@@ -30,7 +27,6 @@ gbOqtApp.controller("ConsentCtrl", ["$scope", "$http", function($scope, $http) {
 
 gbOqtApp.controller("NoConsentCtrl", ["$scope", function($scope) {
 	$scope.getConsentPage = function() {
-		// window.location = "http://localhost:5000/get_consent/";
 		window.location = "/get_consent/";
 	}
 }])
@@ -48,7 +44,6 @@ gbOqtApp.controller("DemographicsCtrl", ["$scope", "$http", function($scope, $ht
 	$scope.setDemographics = function() {
 		$http.post("/set_demographics/", $scope.demographics).
 		success(function(data, status, headers, config) {
-			// window.location = "http://localhost:5000/" + data["next"] + "/";
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
@@ -87,7 +82,6 @@ gbOqtApp.controller("QuizCtrl", ["$scope", "$http", function($scope, $http) {
 		console.log($scope.quiz)
 		$http.post("/submit_quiz/", $scope.quiz).
 		success(function(data, status, headers, config) {
-			// window.location = "http://localhost:5000/" + data["next"] + "/";
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
