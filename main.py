@@ -726,7 +726,7 @@ def generate_quiz_data():
 		# 		quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
 
 		qnums = [304, 305, 306, 307, 308, 309, 52, 177, 155, 218, 302, 303, 162, 186, 22, 54, 127, 310, 4, 39, 100, 311, 318, 312, 300, 301, 313, 314, 63, 196, 219, 315, 23, 316, 7, 111, 91, 317, 40, 101]
-		for i in xrange(20):
+		for i in xrange(20, 40):
 			available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
 			available_countries.remove(STORIES[qnums[i]]["country"])
 			choices = [STORIES[qnums[i]]["country"]]
