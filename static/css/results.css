@@ -106,10 +106,14 @@ body .twitter-share-button {
 
 #fb_share_button {
 	width: 300px;
-	background: -webkit-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
+	/*background: -webkit-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
 	background: -moz-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
 	background: -ms-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
-	background: -o-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
+	background: -o-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));*/
+	background: -webkit-linear-gradient(#5b7bd5, #4864b1);
+	background: -moz-linear-gradient(#5b7bd5, #4864b1);
+	background: -ms-linear-gradient(#5b7bd5, #4864b1);
+	background: -o-linear-gradient(#5b7bd5, #4864b1);
 	border: none;
 	color: white;
 	display: block;
