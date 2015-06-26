@@ -116,21 +116,27 @@ body .twitter-share-button {
 }
 
 #fb_share_button:hover {
-	background: -webkit-linear-gradient(#55acee, #55acee);
-	border-color: #55acee #55acee #55acee;
-	-webkit-box-shadow: inset 0 0 1px #55acee;
+	background: -webkit-linear-gradient(#5b7bd5, #4864b1);
+	border-color: #5874c3 #4961a8 #41599f;
+	-webkit-box-shadow: inset 0 0 1px #607fd6;
 }
 
 #twitter_share_button {
 	width: 300px;
 	background-color: #55acee;
-	background-image: linear-gradient(#55acee,#55acee);
-	border: #55acee solid 1px;
+	background-image: linear-gradient(#55acee,#2795e9);
+	border: none;
 	display: block;
 	margin-left: 300px;
 	margin-right: auto;
 	transform: scale(1.5);
 	margin-top: 25px;
+	/*border: #ccc solid 1px;
+	display: block;
+	margin-left: 300px;
+	margin-right: auto;
+	transform: scale(1.5);
+	margin-top: 25px;*/
 }
 
 #twitter_share_button:hover {
