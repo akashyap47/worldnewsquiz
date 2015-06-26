@@ -724,7 +724,7 @@ def generate_quiz_data():
 				choices += random.sample(available_countries, 3)
 				random.shuffle(choices)
 				quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
-		random.shuffle(quiz_data)
+		# random.shuffle(quiz_data)
 		c400 = ["usa", "cod", "vnm", "pak"]
 		random.shuffle(c400)
 		c401 = ["chn", "usa", "ind", "deu"]
