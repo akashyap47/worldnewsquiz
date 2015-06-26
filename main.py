@@ -729,6 +729,9 @@ def generate_quiz_data():
 		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": ["chn", "usa", "ind", "deu"]})
 		return quiz_data
 	except Exception:
+		print "available_countries:", available_countries
+		print "story_id:", story_id
+		print "country:", STORIES[story_id]["country"]
 		traceback.print_exc()
 
 if __name__ == '__main__':
