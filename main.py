@@ -351,6 +351,7 @@ def index():
 			print "code is getting here!"
 			return redirect(url_for("get_consent"))
 		else:
+			print "code is getting here2!!!!"
 			session["crowdflower"] = False
 			session["experiment_started"] = True
 			pc = request.args.get("pc")
