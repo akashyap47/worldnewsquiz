@@ -12,7 +12,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 		<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 		{% if is_var %}
-		<meta property="og:url" content="http://worldnewsquiz-dev.mediameter.org/?storyv={{ en }}{{ story_lang }}" />
+		<meta property="og:url" content="http://worldnewsquiz-dev.mediameter.org/?storyv={{ story_lang }}{{ pc }}" />
 		<meta property="og:image" content="http://i.imgur.com/{{ imgur_hash }}.png" />
 			{% if story_lang == "chn" %}
 			<meta property="og:title" content="世界新闻问答" />
