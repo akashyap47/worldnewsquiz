@@ -473,6 +473,8 @@ def set_demographics():
 
 @app.route("/bad_demographics/", methods=["GET"])
 def bad_demographics():
+	return render_template("bad_demographics.html", lang=session.get("lang"),
+															strings_d=STRINGS_D)
 	if user_crowdflower() and user_bad_demographics() and not user_completed_quiz():
 			return render_template("bad_demographics.html", lang=session.get("lang"),
 															strings_d=STRINGS_D)
@@ -481,6 +483,8 @@ def bad_demographics():
 
 @app.route("/code_invalidated/", methods=["GET"])
 def code_invalidated():
+	return render_template("code_invalidated.html", lang=session.get("lang"),
+															strings_d=STRINGS_D)
 	if (user_crowdflower() and user_completed_quiz() and not user_completed_experiment() and
 	   (user_bad_demographics() or session.get("consent") == False)):
 			return render_template("code_invalidated.html", lang=session.get("lang"),
