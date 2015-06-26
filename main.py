@@ -649,7 +649,7 @@ def get_results():
 											   num_correct=str(session["num_correct"]),
 											   lang=session.get("lang"),
 											   histogram_d = histogram_d,
-											   purple_bar_i = session["pct_correct"]/10,
+											   purple_bar_i = purple_bar_i,
 											   readup_countries = session["readup_countries"],
 											   in_china = in_china,
 											   code_to_country = ISO_CODE_TO_COUNTRY_NAME,
