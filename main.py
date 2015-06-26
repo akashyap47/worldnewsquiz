@@ -330,8 +330,8 @@ def get_next_module():
 
 @app.route("/", methods=["GET"])
 def index():
-	print "is_crowdflower:", request.get.args("crowdflower")
-	print "lang:", request.get.args("lang")
+	print "is_crowdflower:", request.args.get("crowdflower")
+	print "lang:", request.args.get("lang")
 	if user_completed_quiz():
 		return redirect(url_for("get_results"))
 	elif user_started_quiz():
