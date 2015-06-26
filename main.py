@@ -643,7 +643,7 @@ def get_results():
 			histogram_d[h_k] = histogram[h_k]
 		in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
 		purple_bar_i = session["pct_correct"]/10
-		if purple_bar_i == 100:
+		if purple_bar_i == 10:
 			purple_bar_i = 9
 		return render_template("results.html", pct_correct=session["pct_correct"],
 											   num_correct=str(session["num_correct"]),
