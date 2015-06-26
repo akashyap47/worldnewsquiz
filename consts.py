@@ -176,16 +176,16 @@ STRINGS_D = {'1-4': {'chn': u'1-4\u5c81', 'en': '1-4'},
  'Your Results!': {'chn': u'\u60a8\u7684\u7ed3\u679c\uff01', 'en': 'Your Results!'},}
 
 DOMAIN_TO_STORIES = {
-  "S&T": {"Positive": [111, 7], "Negative": [101, 213]},
-  "NS": {"Positive": [32, 62], "Negative": [125, 163]},
-  "IR": {"Positive": [50, 85], "Negative": [16, 28]},
-  "H&M": {"Positive": [22, 54], "Negative": [96, 218]},
-  "G&P": {"Positive": [134, 14], "Negative": [200, 304]},
-  "E&E": {"Positive": [40, 48], "Negative": [121, 155]},
-  "EDU": {"Positive": [63, 221], "Negative": [162, 301]},
-  "E&B": {"Positive": [115, 214], "Negative": [46, 127]},
-  "C&L": {"Positive": [122, 302], "Negative": [60, 186]},
-  "CR&F": {"Positive": [102, 174], "Negative": [100, 168]},
+  "S&T": {"Positive": [304, 305], "Negative": [306, 307]},
+  "NS": {"Positive": [308, 309], "Negative": [52, 177]},
+  "IR": {"Positive": [155, 218], "Negative": [302, 303]},
+  "H&M": {"Positive": [162, 186], "Negative": [22, 54]},
+  "G&P": {"Positive": [127, 310], "Negative": [4, 39]},
+  "E&E": {"Positive": [100, 311], "Negative": [318, 312]},
+  "EDU": {"Positive": [300, 301], "Negative": [313, 314]},
+  "E&B": {"Positive": [63, 196], "Negative": [219, 315]},
+  "C&L": {"Positive": [23, 316], "Negative": [7, 111]},
+  "CR&F": {"Positive": [91, 317], "Negative": [40, 101]},
 }
 
 SURVEYS = {
