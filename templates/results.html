@@ -152,11 +152,12 @@
 			</div>
 			<div id="result">
 			{% if pct_correct >= 90 %}
-			Excellent job!
+			{{ strings_d["Excellent job!"][lang] }}
 			{% elif pct_correct >= 80 %}
-			Good job!
+			{{ strings_d["Good job!"][lang] }}
 			{% elif pct_correct >= 70 %}
-			Not bad!{% endif %}
+			{{ strings_d["Not bad!"][lang] }}
+			{% endif %}
 			{% if lang == "en" %}
 			You got <text>{{ num_correct }}</text> of the 22 questions right!
 			{% else %}
