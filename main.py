@@ -729,7 +729,7 @@ def generate_quiz_data():
 		for i in xrange(20):
 			available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
 			available_countries.remove(STORIES[qnums[i]]["country"])
-			choices = STORIES[qnums[i]]["country"]
+			choices = [STORIES[qnums[i]]["country"]]
 			choices += random.sample(available_countries, 3)
 			quiz_data.append({"story_id": qnums[i], "story": (STORIES[qnums[i]][lang]).decode("utf-8"), "choices": choices})
 
