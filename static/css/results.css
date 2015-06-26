@@ -113,6 +113,10 @@ body .twitter-share-button {
 	margin-left: 300px;
 	margin-right: auto;
 	transform: scale(1.5);
+	-webkit-transform: scale(1.5);
+	-moz-transform: scale(1.5);
+	-ms-transform: scale(1.5);
+	-o-transform: scale(1.5);
 }
 
 #fb_share_button:hover {
@@ -132,6 +136,10 @@ body .twitter-share-button {
 	margin-right: auto;
 	transform: scale(1.5);
 	margin-top: 25px;
+	-webkit-transform: scale(1.5);
+	-moz-transform: scale(1.5);
+	-ms-transform: scale(1.5);
+	-o-transform: scale(1.5);
 }
 
 #twitter_share_button:hover {
