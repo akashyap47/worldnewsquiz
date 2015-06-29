@@ -732,7 +732,7 @@ def generate_quiz_data():
 					available_stories[domain][valence].append(story_id)
 
 		lang = session.get("lang")
-		for i in xrange(5):
+		for i in xrange(5, 10):
 			domain = DOMAINS[i]
 			for valence in ["Positive", "Negative"]:
 				for story_id in DOMAIN_TO_STORIES[domain][valence]:
