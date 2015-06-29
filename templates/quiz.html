@@ -69,8 +69,8 @@
 				scrollTop: $("#" + renderIndexString + "_row").offset().top + 500,
 			}, 1250, "linear");
 			// window.scrollTo(0,document.body.scrollHeight);
-			$scope.lastRendered += 1;
 			$(".progress-bar").css("width", Math.floor(100*$scope.lastRendered/22).toString() + "%");
+			$scope.lastRendered += 1;
 			if ($scope.lastRendered == 22) {
 				$("#nq_button").css("display", "none");
 				$("#submit_button").css("display", "block").fadeIn(100, "linear");
