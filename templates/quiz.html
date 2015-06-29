@@ -72,10 +72,8 @@
 			// $("#" + renderIndexString + "_row").attr("hidden", false);
 			$("#" + renderIndexString + "_row").fadeIn(100, "swing");
 			$('html,body').animate({
-				scrollTop: $("#" + renderIndexString + "_row").offset().top - 285,
-			}, 1000, "linear");
-			// 285 is pretty good
-			// $("html,body").animate({scrollTop: 0}, 1250, "linear");
+				scrollTop: $("#" + renderIndexString + "_row").offset().top + 300,
+			}, 1250, "linear");
 			// window.scrollTo(0,document.body.scrollHeight);
 			// console.log(100*$scope.lastRendered/22);
 			$(".progress-bar").css("width", Math.floor(100*$scope.lastRendered/22).toString() + "%");
