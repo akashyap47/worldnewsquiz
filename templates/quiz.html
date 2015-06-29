@@ -63,6 +63,7 @@
 				}
 				if (i == 22) {
 					$(".progress-bar").css("width", "100%");
+					$(".progress-bar").addClass("progress-bar-success");
 					return;
 				}
 			}
@@ -74,8 +75,6 @@
 			$('html,body').animate({
 				scrollTop: $("#" + renderIndexString + "_row").offset().top - 285,
 			}, 500, "linear");
-			// window.scrollTo(0,document.body.scrollHeight);
-			// console.log(100*$scope.lastRendered/22);
 			$(".progress-bar").css("width", Math.floor(100*$scope.lastRendered/22).toString() + "%");
 			$scope.lastRendered += 1;
 			// console.log($scope.lastRendered);
