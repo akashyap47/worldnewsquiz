@@ -65,8 +65,11 @@ body div#footer {
 
 .progress {
 	width: 600px;
-	background-color: #9245AB;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.progress-bar {
+	background-color: #9245AB;
 }
