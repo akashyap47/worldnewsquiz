@@ -732,27 +732,32 @@ def generate_quiz_data():
 					available_stories[domain][valence].append(story_id)
 
 		lang = session.get("lang")
-		for domain in DOMAINS:
-			for i in xrange(2):
-				story_id = None
-				choices = []
-				if random.random() < 0.5:
-					story_id = random.choice(available_stories[domain]["Positive"])
-					available_stories[domain]["Positive"].remove(story_id)
-				else:
-					story_id = random.choice(available_stories[domain]["Negative"])
-					available_stories[domain]["Negative"].remove(story_id)
-				choices.append(STORIES[story_id]["country"])
-				available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
-				available_countries.remove(STORIES[story_id]["country"])
-				choices += random.sample(available_countries, 3)
-				random.shuffle(choices)
-				quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
-		random.shuffle(quiz_data)
+		for i in xrange(5):
+			domain = DOMAINS[i]
+			for valence in ["Positive", "Negative"]:
+				for story_id in DOMAIN_TO_STORIES[domain][valence]:
+					quiz_data.append({"story_id": story_id, "story": STORIES[story_id][lang]).decode("utf-8"), "choices": [STORIES[story_id]["country"]]*4})
+		# for domain in DOMAINS:
+		# 	for i in xrange(2):
+		# 		story_id = None
+		# 		choices = []
+		# 		if random.random() < 0.5:
+		# 			story_id = random.choice(available_stories[domain]["Positive"])
+		# 			available_stories[domain]["Positive"].remove(story_id)
+		# 		else:
+		# 			story_id = random.choice(available_stories[domain]["Negative"])
+		# 			available_stories[domain]["Negative"].remove(story_id)
+		# 		choices.append(STORIES[story_id]["country"])
+		# 		available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
+		# 		available_countries.remove(STORIES[story_id]["country"])
+		# 		choices += random.sample(available_countries, 3)
+		# 		random.shuffle(choices)
+		# 		quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
+		# random.shuffle(quiz_data)
 		c400 = ["usa", "cod", "vnm", "pak"]
-		random.shuffle(c400)
+		# random.shuffle(c400)
 		c401 = ["chn", "usa", "ind", "deu"]
-		random.shuffle(c401)
+		# random.shuffle(c401)
 		quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": c400})
 		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": c401})
 		return quiz_data
