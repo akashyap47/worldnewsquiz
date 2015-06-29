@@ -736,7 +736,7 @@ def generate_quiz_data():
 			domain = DOMAINS[i]
 			for valence in ["Positive", "Negative"]:
 				for story_id in DOMAIN_TO_STORIES[domain][valence]:
-					quiz_data.append({"story_id": story_id, "story": STORIES[story_id][lang]).decode("utf-8"), "choices": [STORIES[story_id]["country"]]*4})
+					quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": [STORIES[story_id]["country"]]*4})
 		# for domain in DOMAINS:
 		# 	for i in xrange(2):
 		# 		story_id = None
