@@ -62,3 +62,7 @@ body div#footer {
 	bottom: initial;
 	margin-bottom: 10px;
 }
+
+.progress {
+	width: 600px;
+}
