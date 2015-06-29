@@ -72,6 +72,7 @@
 			console.log(100*$scope.lastRendered/22);
 			$(".progress-bar").css("width", Math.floor(100*$scope.lastRendered/22).toString() + "%");
 			$scope.lastRendered += 1;
+			console.log($scope.lastRendered);
 			if ($scope.lastRendered == 22) {
 				$("#nq_button").css("display", "none");
 				$("#submit_button").css("display", "block").fadeIn(100, "linear");
