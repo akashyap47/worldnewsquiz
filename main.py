@@ -540,9 +540,8 @@ def quiz():
 	try:
 		quiz_data = get_quiz_data(session.get("id"))
 		if not quiz_data:
-			try:
-				quiz_data = generate_quiz_data()
-				persist_initial_state(quiz_data)
+			quiz_data = generate_quiz_data()
+			persist_initial_state(quiz_data)
 	except Exception:
 		traceback.print_exc()
 		return render_template("error.html", lang=session.get("lang"),
