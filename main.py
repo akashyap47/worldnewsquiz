@@ -416,6 +416,7 @@ def set_consent():
 	req_data = request.get_json()
 	if "consent" not in req_data or type(req_data["consent"]) != bool:
 		return jsonify({"next": get_next_module()})
+	print "Code getting here 0!!!"
 	if req_data["consent"] != session.get("consent"):
 		if DEBUG: print "Consent changed to:", session["consent"]
 		try:
