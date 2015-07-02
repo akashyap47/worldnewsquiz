@@ -414,6 +414,8 @@ def set_consent():
 	elif user_completed_experiment() and user_crowdflower():
 		return jsonify({"next": get_next_module()})
 	req_data = request.get_json()
+	print "req_data:", req_data
+	print "session:", session.get("consent")
 	if "consent" not in req_data or type(req_data["consent"]) != bool:
 		return jsonify({"next": get_next_module()})
 	print "Code getting here 0!!!"
