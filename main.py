@@ -1,13 +1,11 @@
-import base64
 import math
 import os
 import random
 import shelve
-import string
 import traceback
 import datetime
 
-from flask import abort, Flask, jsonify, redirect, render_template, request, session, url_for
+from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask.ext.cors import cross_origin
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -39,6 +37,7 @@ class User(db.Model):
 
 class Quiz(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
+	lang = db.Column(db.String(32))
 	user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 	q1_sid = db.Column(db.Integer)
 	q1_c1 = db.Column(db.String(8))
@@ -278,16 +277,14 @@ def persist_initial_state(quiz_data):
 	u.valid = False
 	u.confirmed = False
 	db.session.add(u)
-	try:
-		db.session.commit()
-	except:
-		traceback.print_exc()
+	db.session.commit()
 	session["id"] = u.id
 	u.confirmation_code = gen_rand_code(session["id"])
 	db.session.commit()
 
 	q = Quiz()
 	q.user_id = session["id"]
+	q.lang = session["lang"]
 	for i in xrange(22):
 		setattr(q, "q" + str(i+1) + "_sid", quiz_data[i]["story_id"])
 		choices = quiz_data[i]["choices"]
@@ -390,11 +387,9 @@ def index():
 @app.route("/set_lang/", methods=["POST"])
 def set_lang():
 	if not user_started_experiment() or user_started_quiz() or user_crowdflower():
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	req_data = request.get_json()
 	if "lang" not in req_data or (req_data["lang"] not in SUPPORTED_LANGS):
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	if DEBUG: print "User has set lang to:", req_data["lang"]
 	session["lang"] = req_data["lang"]
@@ -415,26 +410,27 @@ def get_consent():
 @app.route("/set_consent/", methods=["POST"])
 def set_consent():
 	if not user_started_experiment() or not user_chosen_lang():
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	elif user_completed_experiment() and user_crowdflower():
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	req_data = request.get_json()
 	if "consent" not in req_data or type(req_data["consent"]) != bool:
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	if req_data["consent"] != session.get("consent"):
-		session["consent"] = req_data["consent"]
 		if DEBUG: print "Consent changed to:", session["consent"]
-		if user_started_quiz():
-			user = User.query.filter_by(id=session.get("id")).first()
-			user.consent = session.get("consent")
-			db.session.commit()
-			if user_completed_quiz() and user_crowdflower() and not session.get("consent"):
-					user.valid = False
-					db.session.commit()
-					return jsonify({"next": "code_invalidated"})
+		try:
+			if user_started_quiz():
+				user = User.query.filter_by(id=session.get("id")).first()
+				user.consent = session.get("consent")
+				db.session.commit()
+				if user_completed_quiz() and user_crowdflower() and not session.get("consent"):
+						user.valid = False
+						db.session.commit()
+						return jsonify({"next": "code_invalidated"})
+			session["consent"] = req_data["consent"]
+		except Exception:
+			traceback.print_exc()
+			return jsonify({"next": "error"})
 	return jsonify({"next": get_next_module()})
 
 @app.route("/no_consent/", methods=["GET"])
@@ -464,16 +460,13 @@ def get_demographics():
 @app.route("/set_demographics/", methods=["POST"])
 def set_demographics():
 	if not session.get("consent"):
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	elif user_crowdflower() and user_completed_experiment():
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	req_data = request.get_json()
 	if ("age" not in req_data or "gender" not in req_data
 		or "education" not in req_data or "country_origin" not in req_data
 		or "country_residence" not in req_data or "native_lang" not in req_data):
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	session["age"] = req_data["age"]
 	session["gender"] = req_data["gender"]
@@ -482,23 +475,27 @@ def set_demographics():
 	session["country_residence"] = req_data["country_residence"]
 	session["native_lang"] = req_data["native_lang"]
 	session["demographics_completed"] = True
-	if user_started_quiz():
-		user = User.query.filter_by(id=session.get("id")).first()
-		user.age = session.get("age")
-		user.gender = session.get("gender")
-		user.education = session.get("education")
-		user.country_origin = session.get("country_origin")
-		user.country_residence = session.get("country_residence")
-		user.native_lang = session.get("native_lang")
-		db.session.commit()
-	if user_crowdflower():
-		if user_bad_demographics():
-			if user_completed_quiz():
-				user = User.query.filter_by(id=session.get("id")).first()
-				user.valid = False
-				return jsonify({"next": "code_invalidated"})
-			else:
-				return jsonify({"next": "bad_demographics"})
+	try:
+		if user_started_quiz():
+			user = User.query.filter_by(id=session.get("id")).first()
+			user.age = session.get("age")
+			user.gender = session.get("gender")
+			user.education = session.get("education")
+			user.country_origin = session.get("country_origin")
+			user.country_residence = session.get("country_residence")
+			user.native_lang = session.get("native_lang")
+			db.session.commit()
+		if user_crowdflower():
+			if user_bad_demographics():
+				if user_completed_quiz():
+					user = User.query.filter_by(id=session.get("id")).first()
+					user.valid = False
+					return jsonify({"next": "code_invalidated"})
+				else:
+					return jsonify({"next": "bad_demographics"})
+	except Exception:
+		traceback.print_exc()
+		return jsonify({"next": "error"})
 	return jsonify({"next": get_next_module()})
 
 @app.route("/bad_demographics/", methods=["GET"])
@@ -540,10 +537,16 @@ def quiz():
 			return redirect(url_for("bad_demographics"))
 	elif user_completed_quiz():
 		return redirect(url_for("results"))
-	quiz_data = get_quiz_data(session.get("id"))
-	if not quiz_data:
-		quiz_data = generate_quiz_data()
-		persist_initial_state(quiz_data)
+	try:
+		quiz_data = get_quiz_data(session.get("id"))
+		if not quiz_data:
+			try:
+				quiz_data = generate_quiz_data()
+				persist_initial_state(quiz_data)
+	except Exception:
+		traceback.print_exc()
+		return render_template("error.html", lang=session.get("lang"),
+									         strings_d=STRINGS_D)
 	session["quiz_started"] = True
 	return render_template("quiz.html", quiz_data=quiz_data,
 	 									code_to_name=ISO_CODE_TO_COUNTRY_NAME,
@@ -553,13 +556,10 @@ def quiz():
 @app.route("/submit_quiz/", methods=["POST"])
 def submit_quiz():
 	if user_completed_quiz() or not user_started_quiz():
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	if session.get("consent") == False:
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	if user_crowdflower() and user_bad_demographics():
-		# abort(403)
 		return jsonify({"next": get_next_module()})
 	req_data = request.get_json()
 	try:
@@ -567,7 +567,6 @@ def submit_quiz():
 		result.t_submitted = datetime.datetime.now()
 		for i in xrange(22):
 			if not req_data.has_key("q" + str(i+1) + "_ans"):
-				# abort(403)
 				return jsonify({"next": get_next_module()})
 			setattr(result, "q" + str(i+1) + "_ans", req_data["q" + str(i+1) + "_ans"])
 		user = User.query.filter_by(id=session.get("id")).first()
@@ -612,6 +611,7 @@ def submit_quiz():
 		db.session.commit()
 	except Exception, err:
 		print traceback.print_stack()
+		return jsonify({"next": "error"})
 
 	session["quiz_completed"] = True
 	if not user_crowdflower():
@@ -688,17 +688,21 @@ def confirm_quiz_completion():
 		return jsonify({"success": False})
 	confirmation_code = data["confirmation_code"]
 	confirmation_code_split = confirmation_code.split(";")
-	if len(confirmation_code_split) == 2:
-		identifier, code = confirmation_code_split
-		query_result = (db.session.query(User).filter(User.id == int(identifier))).first()
-		if query_result and query_result.confirmation_code.split(";")[1] == code and query_result.valid and not query_result.confirmed:
-			query_result.confirmed = True
-			db.session.commit()
-			return jsonify({'success': True, 'confirmation_code': confirmation_code})
+	try:
+		if len(confirmation_code_split) == 2:
+			identifier, code = confirmation_code_split
+			query_result = (db.session.query(User).filter(User.id == int(identifier))).first()
+			if query_result and query_result.confirmation_code.split(";")[1] == code and query_result.valid and not query_result.confirmed:
+				query_result.confirmed = True
+				db.session.commit()
+				return jsonify({'success': True, 'confirmation_code': confirmation_code})
+			else:
+				return jsonify({'success': False, "retry": False})
 		else:
-			return jsonify({'success': False})
-	else:
-		return jsonify({'success': False})
+			return jsonify({'success': False, "retry": False})
+	except Exception:
+		traceback.print_exc()
+		return jsonify({"success": False, "retry": True})
 
 def get_quiz_data(uid):
 	result = Quiz.query.filter_by(user_id=uid).first()
@@ -715,49 +719,39 @@ def get_quiz_data(uid):
 	return quiz_data
 
 def generate_quiz_data():
-	try:
-		quiz_data = []
-		available_stories = {}
-		for domain in DOMAIN_TO_STORIES:
-			available_stories[domain] = {"Positive": [], "Negative": []}
-			for valence in ["Positive", "Negative"]:
-				for story_id in DOMAIN_TO_STORIES[domain][valence]:
-					available_stories[domain][valence].append(story_id)
+	quiz_data = []
+	available_stories = {}
+	for domain in DOMAIN_TO_STORIES:
+		available_stories[domain] = {"Positive": [], "Negative": []}
+		for valence in ["Positive", "Negative"]:
+			for story_id in DOMAIN_TO_STORIES[domain][valence]:
+				available_stories[domain][valence].append(story_id)
 
-		lang = session.get("lang")
-		for domain in DOMAINS:
-			for i in xrange(2):
-				story_id = None
-				choices = []
-				if random.random() < 0.5:
-					story_id = random.choice(available_stories[domain]["Positive"])
-					available_stories[domain]["Positive"].remove(story_id)
-				else:
-					story_id = random.choice(available_stories[domain]["Negative"])
-					available_stories[domain]["Negative"].remove(story_id)
-				choices.append(STORIES[story_id]["country"])
-				available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
-				available_countries.remove(STORIES[story_id]["country"])
-				choices += random.sample(available_countries, 3)
-				random.shuffle(choices)
-				quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
-		random.shuffle(quiz_data)
-		c400 = ["usa", "cod", "vnm", "pak"]
-		random.shuffle(c400)
-		c401 = ["chn", "usa", "ind", "deu"]
-		random.shuffle(c401)
-		quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": c400})
-		quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": c401})
-		return quiz_data
-	except Exception:
-		traceback.print_exc()
+	lang = session.get("lang")
+	for domain in DOMAINS:
+		for i in xrange(2):
+			story_id = None
+			choices = []
+			if random.random() < 0.5:
+				story_id = random.choice(available_stories[domain]["Positive"])
+				available_stories[domain]["Positive"].remove(story_id)
+			else:
+				story_id = random.choice(available_stories[domain]["Negative"])
+				available_stories[domain]["Negative"].remove(story_id)
+			choices.append(STORIES[story_id]["country"])
+			available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
+			available_countries.remove(STORIES[story_id]["country"])
+			choices += random.sample(available_countries, 3)
+			random.shuffle(choices)
+			quiz_data.append({"story_id": story_id, "story": (STORIES[story_id][lang]).decode("utf-8"), "choices": choices})
+	random.shuffle(quiz_data)
+	c400 = ["usa", "cod", "vnm", "pak"]
+	random.shuffle(c400)
+	c401 = ["chn", "usa", "ind", "deu"]
+	random.shuffle(c401)
+	quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": c400})
+	quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": c401})
+	return quiz_data
 
 if __name__ == '__main__':
-	if not os.path.isfile("histogram.db"):
-		s = shelve.open("histogram")
-		for i in xrange(10):
-			shelf_k = str(i*10) + "s"
-			s[shelf_k] = 0
-		s.close()
-		db.create_all()
 	app.run(debug=True)
