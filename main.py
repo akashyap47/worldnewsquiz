@@ -420,7 +420,6 @@ def set_consent():
 	print "req_data:", req_data["consent"]
 	print "session:", session.get("consent")
 	if req_data["consent"] != session.get("consent"):
-		if DEBUG: print "Consent changed to:", session["consent"]
 		try:
 			print "Code getting here1"
 			if user_started_quiz():
@@ -436,6 +435,7 @@ def set_consent():
 						db.session.commit()
 						return jsonify({"next": "code_invalidated"})
 			session["consent"] = req_data["consent"]
+			if DEBUG: print "Consent changed to:", session["consent"]
 		except Exception:
 			print "An exception is happening!"
 			traceback.print_exc()
