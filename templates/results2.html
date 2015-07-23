@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/results2.css') }}">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -31,74 +30,6 @@
 </head>
 
 <body>
-	{% if not in_china %}
-	<script>
-	$(window).load(function() {
-	window.fbAsyncInit = function() {
-		FB.init({
-			appId	: '1459853577646905',
-			xfbml	: true,
-			version	: 'v2.3',
-			status	: false,
-		});
-
-		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-
-		var ctx = $("#bar")[0].getContext("2d");
-		var options = {
-			/*scaleOverride: true,
-			scaleStartValue: 0,*/
-			// animation: false,
-			scaleShowGridLines: false,
-			scaleShowLabels: false,
-		};
-		var data = {
-	    	labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
-	    	datasets: [
-		        {
-		            // fillColor: "rgba(146,69,171,0.5)",
-		            // strokeColor: "rgba(146,69,171,0.8)",
-		            // highlightFill: "rgba(146,69,171,0.75)",
-		            // highlightStroke: "rgba(146,69,171,1)",
-		            fillColor: "rgba(128,128,128,0.5)",
-		            strokeColor: "rgba(128,128,128,128)",
-		            highlightFill: "rgba(128,128,128,0.75)",
-		            highlightStroke: "rgba(128,128,128,1)",
-		            data: [{{ histogram_d["0s"] }},
-		            	   {{ histogram_d["10s"] }},
-		            	   {{ histogram_d["20s"] }},
-		            	   {{ histogram_d["30s"] }},
-		            	   {{ histogram_d["40s"] }},
-		            	   {{ histogram_d["50s"] }},
-		            	   {{ histogram_d["60s"] }},
-		            	   {{ histogram_d["70s"] }},
-		            	   {{ histogram_d["80s"] }},
-		            	   {{ histogram_d["90s"] }}],
-		        },
-	    	],
-		};
-		var percentileChart = new Chart(ctx).Bar(data, options);
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].fillColor = "rgba(146,69,171,0.5)";
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].strokeColor = "rgba(146,69,171,0.8)";
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].highlightFill = "rgba(146,69,171,0.75)";
-		percentileChart.datasets[0].bars[{{ purple_bar_i }}].highlightStroke = "rgba(146,69,171,1)";
-		percentileChart.update();
-	};
-
-	(function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         {% if lang == "en" %}
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         {% else %}
-         js.src = "//connect.facebook.net/zh_CN/sdk.js";
-         {% endif %}
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-	});
-	</script>
-	{% else %}
 	<script>
 	$(window).load(function() {
 		var ctx = $("#bar")[0].getContext("2d");
@@ -142,13 +73,13 @@
 		percentileChart.update();
 	});
 	</script>
-	{% endif %}
-	<!--<script src="https://apis.google.com/js/platform.js" defer></script>-->
-
 	<div ng-app="gbOqtApp">
-	<div id="main_container" class="container-fluid">
-	<div id="result_box">
-		<div id="percent_and_sentence">
+		<div id="main_container" class="container-fluid">
+			<div id="result_box">
+			</div>
+		</div>
+	</div>
+		<!--<div id="percent_and_sentence">
 			<div id="percent">
 			{{ pct_correct}}%
 			</div>
@@ -205,19 +136,19 @@
 		
 			<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
 			<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
-		<!--<div class="fb-share-button" data-href="http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}" data-layout="button"></div>
+		<!<div class="fb-share-button" data-href="http://worldnewsquiz-dev.mediameter.org/?pc={{ pct_correct }}" data-layout="button"></div>
 		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://worldnewsquiz-dev.mediameter.org" data-text="I scored {{ pct_correct}}%! Test your World News knowledge with this quiz developed at MIT!" data-count="none" data-hashtags="WorldNewsQuiz" {% if lang == "chn" %} data-lang="zh-cn" {% endif %}>Tweet</a>
 		</div>-->
-		{% else %}
+		<!--{% else %}
 		<div id="sharing_well" class="well well-sm">
 		<a href="https://gboqt.herokuapp.com">worldnewsquiz.mediameter.org</a>
 		</div>
 		</div>
 		</div>
-		{% endif %}
+		{% endif %}-->
 		<!--<div class="google-share-button g-plus" data-action="share" data-annotation="none" data-href="https://google.com"></div>-->
 <!--<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>-->
-	</div>
+	<!--</div>-->
 	<!--<div id="sharing_box">
 		<div id="thanks">
 			Thanks for taking the quiz!
@@ -234,7 +165,7 @@
 			</div>
 		</div>
 	</div>-->
-	</div>
+	<!--</div>-->
 	<!--<h2 id='world_news_quiz_title'>{{ strings_d["World News Quiz"][lang] }}</h2>
 	<h3 id='error_title'>{{ pct_correct }}%!</h3>
 	<div id='completion_explanation'>
