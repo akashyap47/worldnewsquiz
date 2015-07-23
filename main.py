@@ -10,7 +10,7 @@ from flask.ext.cors import cross_origin
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from aux import SECRET_KEY, gen_rand_code
-from consts import DOMAINS, DOMAIN_TO_STORIES, ISO_CODE_TO_COUNTRY_NAME, STRINGS_D, STORIES, SURVEYS, QUESTIONS
+from consts import DOMAINS, DOMAIN_TO_STORIES, ISO_CODE_TO_COUNTRY_NAME, STRINGS_D, STORIES, SURVEYS, QUESTIONS, CODE_TO_CUISINE
 
 DEBUG = True
 
@@ -23,6 +23,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
+	ip_addr = db.Column(db.String(45))
 	crowdflower = db.Column(db.Boolean)
 	consent = db.Column(db.Boolean)
 	age = db.Column(db.String(32))
@@ -34,6 +35,7 @@ class User(db.Model):
 	confirmation_code = db.Column(db.String(64), nullable=True)
 	valid = db.Column(db.Boolean)
 	confirmed = db.Column(db.Boolean)
+	authentic = db.Column(db.Boolean)
 
 class Quiz(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -185,6 +187,13 @@ if not os.path.isfile(basedir + "/histogram.db"):
 
 SUPPORTED_LANGS = ["en", "chn"]
 
+VALID_AGES = ["na", "1-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+"]
+VALID_GENDERS = ["na", "f", "m", "other"]
+VALID_EDUCATIONS = ["na", "hs_incomplete", "hs_complete", "vocational_degree", "two_yr_grad_degree", "four_yr_grad_degree", "postgrad_degree"]
+VALID_ORIGINS = ISO_CODE_TO_COUNTRY_NAME.keys() + ["na", "other"]
+VALID_RESIDENCES = ISO_CODE_TO_COUNTRY_NAME.keys() + ["na", "other"]
+VALID_LANGS = SUPPORTED_LANGS + ["na", "other"]
+
 PC_TO_IMGUR_HASH = {
 	"en0": "3z0Bi0R",
 	"en4": "GVU0dv4",
@@ -234,6 +243,9 @@ PC_TO_IMGUR_HASH = {
 	"chn100": "eMprxRJ",
 }
 
+def user_bad_effort():
+	return session.get("bad_effort")
+
 def user_completed_experiment():
 	return session.get("experiment_completed")
 
@@ -256,9 +268,9 @@ def user_completed_demographics():
 	return session.get("demographics_completed")
 
 def user_bad_demographics():
-	return ((session.get("native_lang") != "na" and session.get("native_lang") != session.get("lang")) or
-		   (session.get("lang") == "chn" and session.get("country_residence") != "na" and session.get("country_residence") != "chn") or
-		   (session.get("lang") == "en" and session.get("country_residence") != "na" and session.get("country_residence") != "usa"))
+	return ((session.get("native_lang") != session.get("lang")) or
+		    (session.get("lang") == "chn" and session.get("country_residence") != "chn") or
+		    (session.get("lang") == "en" and session.get("country_residence") != "usa"))
 
 def user_code_invalidated():
 	return (user_crowdflower() and user_completed_quiz() and (not user_completed_experiment()) and
@@ -267,6 +279,7 @@ def user_code_invalidated():
 def persist_initial_state(quiz_data):
 	u = User()
 	u.crowdflower = session["crowdflower"]
+	u.ip_addr = session["ip_addr"]
 	u.consent = session["consent"]
 	u.age = session["age"]
 	u.gender = session["gender"]
@@ -276,6 +289,9 @@ def persist_initial_state(quiz_data):
 	u.native_lang = session["native_lang"]
 	u.valid = False
 	u.confirmed = False
+	u.authentic = True
+	if session.get("authentic") == False:
+		u.authentic = False
 	db.session.add(u)
 	db.session.commit()
 	session["id"] = u.id
@@ -361,6 +377,7 @@ def index():
 	else:
 		is_crowdflower = request.args.get("crowdflower")
 		lang = request.args.get("lang")
+		session["ip_addr"] = request.access_route[0] or request.remote_addr
 		if is_crowdflower == "true" and lang in SUPPORTED_LANGS:
 			session["crowdflower"] = True
 			session["lang"] = lang
@@ -418,18 +435,23 @@ def set_consent():
 		return jsonify({"next": get_next_module()})
 	if req_data["consent"] != session.get("consent"):
 		try:
+			session["consent"] = req_data["consent"]
 			if user_started_quiz():
 				user = User.query.filter_by(id=session.get("id")).first()
 				user.consent = session.get("consent")
+				if not session.get("consent") and user_crowdflower():
+					user.authentic = False
 				db.session.commit()
 				if user_completed_quiz() and user_crowdflower() and not session.get("consent"):
 						user.valid = False
 						db.session.commit()
 						return jsonify({"next": "code_invalidated"})
-			session["consent"] = req_data["consent"]
+			if session["consent"] == False and user_crowdflower():
+				session["authentic"] = False
 			if DEBUG: print "Consent changed to:", session["consent"]
 		except Exception:
 			traceback.print_exc()
+			traceback.print_stack()
 			return jsonify({"next": "error"})
 	return jsonify({"next": get_next_module()})
 
@@ -468,6 +490,13 @@ def set_demographics():
 		or "education" not in req_data or "country_origin" not in req_data
 		or "country_residence" not in req_data or "native_lang" not in req_data):
 		return jsonify({"next": get_next_module()})
+	if ((req_data["age"] not in VALID_AGES) or
+		(req_data["gender"] not in VALID_GENDERS) or
+		(req_data["education"] not in VALID_EDUCATIONS) or
+		(req_data["country_origin"] not in VALID_ORIGINS) or
+		(req_data["country_residence"] not in VALID_RESIDENCES) or
+		(req_data["native_lang"] not in VALID_LANGS)):
+		return jsonify({"next": get_next_module()})
 	session["age"] = req_data["age"]
 	session["gender"] = req_data["gender"]
 	session["education"] = req_data["education"]
@@ -487,10 +516,15 @@ def set_demographics():
 			db.session.commit()
 		if user_crowdflower():
 			if user_bad_demographics():
-				if user_completed_quiz():
+				session["authentic"] = False
+				if user_started_quiz():
 					user = User.query.filter_by(id=session.get("id")).first()
-					user.valid = False
-					return jsonify({"next": "code_invalidated"})
+					user.authentic = False
+					db.session.commit()
+					if user_completed_quiz():
+						user.valid = False
+						db.session.commit()
+						return jsonify({"next": "code_invalidated"})
 				else:
 					return jsonify({"next": "bad_demographics"})
 	except Exception:
@@ -515,6 +549,15 @@ def code_invalidated():
 	else:
 		return redirect_appropriately()
 
+@app.route("/effort/", methods=["GET"])
+def effort():
+	if (user_crowdflower() and user_completed_quiz() and not user_completed_experiment() and
+		user_bad_effort()):
+		return render_template("poor_effort.html", lang=session.get("lang"),
+											       strings_d=STRINGS_D)
+	else:
+		return redirect_appropriately()
+
 @app.route("/quiz/", methods=["GET"])
 def quiz():
 	if not user_started_experiment():
@@ -536,7 +579,7 @@ def quiz():
 		else:
 			return redirect(url_for("bad_demographics"))
 	elif user_completed_quiz():
-		return redirect(url_for("results"))
+		return redirect(url_for("get_results"))
 	try:
 		quiz_data = get_quiz_data(session.get("id"))
 		if not quiz_data:
@@ -561,22 +604,32 @@ def submit_quiz():
 	if user_crowdflower() and user_bad_demographics():
 		return jsonify({"next": get_next_module()})
 	req_data = request.get_json()
+	tt = None
 	try:
 		result = Quiz.query.filter_by(user_id=session.get("id")).first()
-		result.t_submitted = datetime.datetime.now()
 		for i in xrange(22):
 			if not req_data.has_key("q" + str(i+1) + "_ans"):
 				return jsonify({"next": get_next_module()})
+			choices = []
+			for j in range(1, 5):
+				choices.append(getattr(result, "q" + str(i+1) + "_c" + str(j)))
+			if req_data["q" + str(i+1) +"_ans"] not in choices + ["na"]:
+				return jsonify({"next": get_next_module()})
 			setattr(result, "q" + str(i+1) + "_ans", req_data["q" + str(i+1) + "_ans"])
+		result.t_submitted = datetime.datetime.now()
+		tt = result.t_submitted - result.t_started
+		tt = divmod(tt.days * 86400 + tt.seconds, 60)
 		user = User.query.filter_by(id=session.get("id")).first()
 		user.valid = True
 	except Exception, err:
 		print err
+		return jsonify({"next": "error"})
 
 	num_correct = 0
 	num_incorrect = 0
 	available_countries = ISO_CODE_TO_COUNTRY_NAME.keys()
 	readup_countries = []
+	gold_wrong = False
 	for i in xrange(22):
 		story_id = getattr(result, "q" + str(i+1) + "_sid")
 		ans = req_data["q" + str(i+1) + "_ans"]
@@ -588,6 +641,8 @@ def submit_quiz():
 				readup_countries.append(correct_ans)
 			if correct_ans in available_countries:
 				available_countries.remove(correct_ans)
+			if (i+1 == 7 and ans != "usa") or (i+1 == 16 and ans != "chn"):
+				gold_wrong = True
 	if len(readup_countries) < 3:
 		readup_countries += random.sample(available_countries, 3 - len(readup_countries))
 	else:
@@ -609,9 +664,17 @@ def submit_quiz():
 		shelf.close()
 		db.session.commit()
 	except Exception, err:
-		print traceback.print_stack()
+		traceback.print_exc()
 		return jsonify({"next": "error"})
 
+	if user_crowdflower() and gold_wrong and (tt[0] < 2 or (tt[0] == 2 and tt[1] < 30)):
+		session["bad_effort"] = True
+		try:
+			user.valid = False
+			db.session.commit()
+		except Exception:
+			print traceback.print_exc()
+			return jsonify({"next": "error"})
 	session["quiz_completed"] = True
 	if not user_crowdflower():
 		session["experiment_completed"] = True
@@ -641,38 +704,51 @@ def get_results():
 		return redirect(url_for("quiz"))
 	elif not user_completed_quiz():
 		return redirect(url_for("quiz"))
+	elif user_crowdflower() and user_bad_effort():
+		return redirect(url_for("effort"))
 	if user_crowdflower():
-			user = User.query.filter_by(id=session.get("id")).first()
-			return render_template("confirmation.html", confirmation_code=user.confirmation_code,
-														lang=session.get("lang"),
-														strings_d=STRINGS_D)
+			try:
+				user = User.query.filter_by(id=session.get("id")).first()
+				return render_template("confirmation.html", confirmation_code=user.confirmation_code,
+															lang=session.get("lang"),
+															strings_d=STRINGS_D)
+			except Exception:
+				traceback.print_exc()
+				return render_template("error.html", lang=session.get("lang"),
+											         strings_d=STRINGS_D)
 	else:
-		result = Quiz.query.filter_by(user_id=session.get("id")).first()
-		num_correct = 0
-		for i in xrange(22):
-			story_id = getattr(result, "q" + str(i+1) + "_sid")
-			ans = getattr(result, "q" + str(i+1) + "_ans")
-			if ans == STORIES[story_id]["country"]:
-				num_correct += 1
-		basedir = os.path.dirname(os.path.abspath(__file__))
-		histogram = shelve.open(basedir + "/histogram.db")
-		histogram_d = {}
-		for i in xrange(10):
-			h_k = str(i*10) + "s"
-			histogram_d[h_k] = histogram[h_k]
-		in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
-		purple_bar_i = session["pct_correct"]/10
-		if purple_bar_i == 10:
-			purple_bar_i = 9
-		return render_template("results.html", pct_correct=session["pct_correct"],
-											   num_correct=str(session["num_correct"]),
-											   lang=session.get("lang"),
-											   histogram_d = histogram_d,
-											   purple_bar_i = purple_bar_i,
-											   readup_countries = session["readup_countries"],
-											   in_china = in_china,
-											   code_to_country = ISO_CODE_TO_COUNTRY_NAME,
-											   strings_d = STRINGS_D)
+		try:
+			result = Quiz.query.filter_by(user_id=session.get("id")).first()
+			num_correct = 0
+			for i in xrange(22):
+				story_id = getattr(result, "q" + str(i+1) + "_sid")
+				ans = getattr(result, "q" + str(i+1) + "_ans")
+				if ans == STORIES[story_id]["country"]:
+					num_correct += 1
+			basedir = os.path.dirname(os.path.abspath(__file__))
+			histogram = shelve.open(basedir + "/histogram.db")
+			histogram_d = {}
+			for i in xrange(10):
+				h_k = str(i*10) + "s"
+				histogram_d[h_k] = histogram[h_k]
+			in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
+			purple_bar_i = session["pct_correct"]/10
+			if purple_bar_i == 10:
+				purple_bar_i = 9
+			return render_template("results.html", pct_correct=session["pct_correct"],
+												   num_correct=str(session["num_correct"]),
+												   lang=session.get("lang"),
+												   histogram_d = histogram_d,
+												   purple_bar_i = purple_bar_i,
+												   readup_countries = session["readup_countries"],
+												   in_china = in_china,
+												   code_to_country = ISO_CODE_TO_COUNTRY_NAME,
+												   code_to_cuisine = CODE_TO_CUISINE,
+												   strings_d = STRINGS_D)
+		except Exception:
+			traceback.print_exc()
+			return render_template("error.html", lang=session.get("lang"),
+										         strings_d=STRINGS_D)
 
 @app.route('/error/', methods=['GET'])
 def error():

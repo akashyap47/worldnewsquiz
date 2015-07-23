@@ -7,7 +7,6 @@ gbOqtApp.controller("LangCtrl", ["$scope", "$http", function($scope, $http) {
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
-			console.log(data);
 			$scope.setLang(lang);
 		});
 	}
@@ -79,7 +78,6 @@ gbOqtApp.controller("QuizCtrl", ["$scope", "$http", function($scope, $http) {
 	};
 
 	$scope.submitQuiz = function() {
-		console.log($scope.quiz)
 		$http.post("/submit_quiz/", $scope.quiz).
 		success(function(data, status, headers, config) {
 			window.location = "/" + data["next"] + "/";
