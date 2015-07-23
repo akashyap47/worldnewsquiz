@@ -735,7 +735,7 @@ def get_results():
 			purple_bar_i = session["pct_correct"]/10
 			if purple_bar_i == 10:
 				purple_bar_i = 9
-			return render_template("results.html", pct_correct=session["pct_correct"],
+			return render_template("results2.html", pct_correct=session["pct_correct"],
 												   num_correct=str(session["num_correct"]),
 												   lang=session.get("lang"),
 												   histogram_d = histogram_d,
