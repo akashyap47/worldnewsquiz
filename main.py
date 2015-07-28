@@ -24,6 +24,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	ip_addr = db.Column(db.String(45))
+	referrer = db.Column(db.String(360))
 	crowdflower = db.Column(db.Boolean)
 	consent = db.Column(db.Boolean)
 	age = db.Column(db.String(32))
@@ -280,6 +281,7 @@ def persist_initial_state(quiz_data):
 	u = User()
 	u.crowdflower = session["crowdflower"]
 	u.ip_addr = session["ip_addr"]
+	u.referrer = session["referrer"]
 	u.consent = session["consent"]
 	u.age = session["age"]
 	u.gender = session["gender"]
@@ -378,9 +380,7 @@ def index():
 		is_crowdflower = request.args.get("crowdflower")
 		lang = request.args.get("lang")
 		session["ip_addr"] = request.access_route[0] or request.remote_addr
-		raise Exception:
-			print "referrer:", request.referrer
-			print "WE MADE CHANGEZ!"
+		session["referrer"] = request.referrer
 		if is_crowdflower == "true" and lang in SUPPORTED_LANGS:
 			session["crowdflower"] = True
 			session["lang"] = lang
