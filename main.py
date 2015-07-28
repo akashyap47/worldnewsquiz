@@ -720,11 +720,30 @@ def get_results():
 		try:
 			result = Quiz.query.filter_by(user_id=session.get("id")).first()
 			num_correct = 0
+			lang = session.get("lang")
+			quiz_data = []
+			pos_valence = []
 			for i in xrange(22):
+				q_data = {}
 				story_id = getattr(result, "q" + str(i+1) + "_sid")
 				ans = getattr(result, "q" + str(i+1) + "_ans")
+				if STORIES[story_id].get("gold_answer") == "Positive":
+					pos_valence.append(ans)
 				if ans == STORIES[story_id]["country"]:
 					num_correct += 1
+				q_data["story"] = STORIES[story_id][lang]
+				q_data["choices"] = []
+				for j in xrange(1, 5):
+					(q_data["choices"]).append(getattr(result, "q" + str(i+1) + "_c" + str(j)))
+				q_data["correct_ans"] = STORIES[story_id]["country"]
+				q_data["user_ans"] = ans
+				q_data["link"] = STORIES[story_id]["link"]
+				quiz_data.append(q_data)
+			liked_country = None
+			if len(pos_valence) == 0:
+				liked_country = random.choice(ISO_CODE_TO_COUNTRY_NAME.keys())
+			else:
+				liked_country = random.choice(pos_valence)
 			basedir = os.path.dirname(os.path.abspath(__file__))
 			histogram = shelve.open(basedir + "/histogram.db")
 			histogram_d = {}
@@ -744,7 +763,9 @@ def get_results():
 												   in_china = in_china,
 												   code_to_country = ISO_CODE_TO_COUNTRY_NAME,
 												   code_to_cuisine = CODE_TO_CUISINE,
-												   strings_d = STRINGS_D)
+												   strings_d = STRINGS_D,
+												   liked_country = liked_country,
+												   quiz_data = quiz_data)
 		except Exception:
 			traceback.print_exc()
 			return render_template("error.html", lang=session.get("lang"),
