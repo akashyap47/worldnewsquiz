@@ -378,6 +378,7 @@ def index():
 		is_crowdflower = request.args.get("crowdflower")
 		lang = request.args.get("lang")
 		session["ip_addr"] = request.access_route[0] or request.remote_addr
+		print "referrer:", request.referrer
 		if is_crowdflower == "true" and lang in SUPPORTED_LANGS:
 			session["crowdflower"] = True
 			session["lang"] = lang
