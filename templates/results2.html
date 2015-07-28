@@ -42,6 +42,7 @@
 		};
 		var data = {
 	    	labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
+	    	// labels: ["0s", "10s", "20s", "30s", "40s", "50s", "60s", "70s", "80s", "90s+"],
 	    	datasets: [
 		        {
 		            // fillColor: "rgba(146,69,171,0.5)",
@@ -76,35 +77,117 @@
 	<div ng-app="gbOqtApp">
 		<div id="main_container" class="container-fluid">
 			<div id="result_box">
+				<div id="percent_and_sentence">
+					<div id="percent">
+					{{ pct_correct}}%
+					</div>
+					<div id="result">
+					{% if pct_correct >= 90 %}
+					{{ strings_d["Excellent job!"][lang] }}
+					{% elif pct_correct >= 80 %}
+					{{ strings_d["Good job!"][lang] }}
+					{% elif pct_correct >= 70 %}
+					{{ strings_d["Not bad!"][lang] }}
+					{% endif %}
+					{% if lang == "en" %}
+					You got <text>{{ num_correct }}</text> of the 22 questions right, and you're currently in <text>5th</text> <!--<text>{{ rank }}</text>--> place!
+					{% else %}
+					在22道问题中，您成功回答了<text>{{ num_correct }}</text>题！
+					{% endif %}
+					</div>
+				</div>
+				<div id="percentile">
+					<canvas id="bar" class="chart chart-bar" data="data" labels="labels"></canvas>
+					<!--<div id="percentile_statement">
+					{{ strings_d["How you stack up against other quiz takers."][lang] }}
+					</div>-->
+				</div>
+				<div id="answer_key">
+					<table class="table table-striped">
+					{% for quiz_datum in quiz_data %}
+					{% set i = loop.index %}
+					<td>
+					<div>
+						<b>{{ (loop.index)|string + ".)" }}</b> {{ quiz_datum["story"] }}
+						<br>
+						<div class="choice_buttons">
+							{% for choice in quiz_datum["choices"] %}
+								{% if choice == quiz_datum["correct_ans"] %}
+								<text class="correct">&#x2713;</text> {{ strings_d[code_to_country[choice]][lang] }}
+								<br>
+								{% elif choice == quiz_datum["user_ans"] %}
+								<text class="incorrect">&#x2717;</text> {{ strings_d[code_to_country[choice]][lang] }}
+								<br>
+								{% else %}
+								- {{ strings_d[code_to_country[choice]][lang] }}
+								<br>
+								{% endif %}
+							{% endfor %}
+							<div class="learn_more_link"><a href="{{ quiz_datum["link"] }}" target="_blank">Learn more</a></div>
+						</div>
+					</div>
+					</td>
+					</tr>
+					<!--<br>-->
+					{% endfor %}
+					</table>
+				</div>
 			</div>
+			<div id="study_box" class="well">
+				<div id="study_title">
+				And you might really like {{ strings_d[code_to_country[liked_country]][lang] }}!
+				</div>
+				<div class="study_explanation" id="study_explanation1">
+				Like we said, we weren't <text>actually</text> testing your knowledge. While every news story you encountered comes from an actual article, we intentionally made the stories vague and imprecise.
+				</div>
+				<div class="study_explanation" id="study_explanation2">
+				So when you're answering our questions, you're relying on your <text>impressions</text> of particular countries. Which countries do you feel productively harness renewable energy? Which countries do you feel struggle with censorship? Which countries do you feel have a growing, robust economy? Your responses help us identify and <text>quantify</text> these sentiments. 
+				</div>
+				<div id="share_pitch">
+				<b>We need many more people to take this quiz. If you'd like to help us out, we'd appreciate if you <text>pass this along</text>!</b>
+				</div>
+				<hr>
+				<div id="share_module">
+					<div id="sharing_labels">
+						<div class="share_label" id="no_score_share_label">
+						I'll share the quiz!
+						</div>
+						<div class="share_label" id="score_share_label">
+						I'm confident! I'll share my score too!
+						</div>
+					</div>
+					<div id="sharing_buttons">
+						<div class="share_buttons" id="no_score_share_buttons">
+							<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
+							<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
+						</div>
+						<div class="share_buttons" id="score_share_buttons">
+							<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
+							<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
+						</div>
+					</div>
+					<!--<div class="share" id="no_score_share">
+						<div class="share_label" id="no_score_share_label">
+						I'll share the quiz!
+						</div>
+						<div class="sharing_buttons">
+							<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
+							<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
+						</div>
+					</div>
+					<div class="share" id="score_share">
+						<div class="share_label" id="score_share_label">
+						I'll share my score too!
+						</div>
+						<div class="sharing_buttons">
+							<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
+							<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
+						</div>
+					</div>-->
+				</div>
 		</div>
 	</div>
-		<!--<div id="percent_and_sentence">
-			<div id="percent">
-			{{ pct_correct}}%
-			</div>
-			<div id="result">
-			{% if pct_correct >= 90 %}
-			{{ strings_d["Excellent job!"][lang] }}
-			{% elif pct_correct >= 80 %}
-			{{ strings_d["Good job!"][lang] }}
-			{% elif pct_correct >= 70 %}
-			{{ strings_d["Not bad!"][lang] }}
-			{% endif %}
-			{% if lang == "en" %}
-			You got <text>{{ num_correct }}</text> of the 22 questions right!
-			{% else %}
-			在22道问题中，您成功回答了<text>{{ num_correct }}</text>题！
-			{% endif %}
-			</div>
-		</div>
-		<div id="percentile">
-			<canvas id="bar" class="chart chart-bar" data="data" labels="labels"></canvas>
-			<div id="percentile_statement">
-			{{ strings_d["How you stack up against other quiz takers."][lang] }}
-			</div>
-		</div>
-		<div id="read_up">
+		<!--<div id="read_up">
 			{% if not in_china %}
 			{% if lang == "en" %}
 			Try reading up on what's going on in <a href="https://news.google.com/?q={{ code_to_country[readup_countries[0]] }}" target="_blank">{{ code_to_country[readup_countries[0]] }}</a>, <a href="https://news.google.com/?q={{ code_to_country[readup_countries[1]] }}" target="_blank">{{ code_to_country[readup_countries[1]] }}</a>, and <a href="https://news.google.com/?q={{ code_to_country[readup_countries[2]] }}" target="_blank">{{ code_to_country[readup_countries[2]] }}</a>. <b>And as a reward</b>, maybe see if there are any nearby restaurants that serve the cuisine of <a href="http://www.yelp.com/search?find_desc={{ code_to_cuisine[readup_countries[0]] }}+food&attrs=RestaurantsPriceRange2.1,RestaurantsPriceRange2.2" target="_blank">{{ code_to_country[readup_countries[0]] }}</a>, <a href="http://www.yelp.com/search?find_desc={{ code_to_cuisine[readup_countries[1]] }}+food&attrs=RestaurantsPriceRange2.1,RestaurantsPriceRange2.2" target="_blank">{{ code_to_country[readup_countries[1]] }}</a>, and <a href="http://www.yelp.com/search?find_desc={{ code_to_cuisine[readup_countries[2]] }}+food&attrs=RestaurantsPriceRange2.1,RestaurantsPriceRange2.2" target="_blank">{{ code_to_country[readup_countries[2]] }}</a>!
