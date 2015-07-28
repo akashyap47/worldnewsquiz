@@ -180,8 +180,8 @@ class Quiz(db.Model):
 basedir = os.path.dirname(os.path.abspath(__file__))
 if not os.path.isfile(basedir + "/histogram.db"):
 	s = shelve.open(basedir + "/histogram.db")
-	for i in xrange(10):
-		shelf_k = str(i*10) + "s"
+	for i in xrange(23):
+		shelf_k = str(int(i/22. * 100))
 		s[shelf_k] = 0
 	s.close()
 	db.create_all()
@@ -276,6 +276,9 @@ def user_bad_demographics():
 def user_code_invalidated():
 	return (user_crowdflower() and user_completed_quiz() and (not user_completed_experiment()) and
 		   (user_bad_demographics() or session.get("consent") == False))
+
+def ordinal(n):
+	return "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
 
 def persist_initial_state(quiz_data):
 	u = User()
@@ -652,18 +655,18 @@ def submit_quiz():
 		readup_countries = random.sample(readup_countries, 3)
 	session["readup_countries"] = readup_countries
 
-	pct_correct = int(float(num_correct)*100/22)
+	pct_correct = int(num_correct/22. * 100)
 	session["num_correct"] = num_correct
 	session["pct_correct"] = pct_correct
 	try:
 		basedir = os.path.dirname(os.path.abspath(__file__))
 		shelf = shelve.open(basedir + "/histogram.db")
-		shelf_k = int(math.floor(pct_correct/10) * 10)
-		if shelf_k == 100:
-			shelf_k = "90s"
-		else:
-			shelf_k = str(shelf_k) + "s"
-		shelf[shelf_k] += 1
+		# shelf_k = int(math.floor(pct_correct/10) * 10)
+		# if shelf_k == 100:
+			# shelf_k = "90s"
+		# else:
+			# shelf_k = str(shelf_k) + "s"
+		shelf[str(pct_correct)] += 1
 		shelf.close()
 		db.session.commit()
 	except Exception, err:
@@ -750,9 +753,21 @@ def get_results():
 			basedir = os.path.dirname(os.path.abspath(__file__))
 			histogram = shelve.open(basedir + "/histogram.db")
 			histogram_d = {}
+			rank = 0
 			for i in xrange(10):
 				h_k = str(i*10) + "s"
-				histogram_d[h_k] = histogram[h_k]
+				histogram_d[h_k] = 0
+			for i in xrange(23):
+				h_k = str(int(i/22. * 100))
+				hd_k = int(math.floor(int(i/22. * 100)/10) * 10)
+				if int(h_k) > session["pct_correct"]:
+					rank += histogram[h_k]
+				hd_k = str(hd_k) + "s"
+				if hd_k == "100s":
+					hd_k = "90s"
+				histogram_d[hd_k] += histogram[h_k]
+			rank += 1
+			rank = ordinal(rank)
 			in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
 			purple_bar_i = session["pct_correct"]/10
 			if purple_bar_i == 10:
@@ -768,6 +783,7 @@ def get_results():
 												   code_to_cuisine = CODE_TO_CUISINE,
 												   strings_d = STRINGS_D,
 												   liked_country = liked_country,
+												   rank = rank,
 												   quiz_data = quiz_data)
 		except Exception:
 			traceback.print_exc()
