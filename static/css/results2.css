@@ -198,3 +198,12 @@ div#answer_key {
 	-ms-transform: scale(1.1);
 	-o-transform: scale(1.1);
 }
+
+#tool_url {
+	text-align: center;
+	font-size: 24px;
+}
+
+div#footer {
+	bottom: 5px;
+}
