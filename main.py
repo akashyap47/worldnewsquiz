@@ -768,7 +768,7 @@ def get_results():
 				histogram_d[hd_k] += histogram[h_k]
 			rank += 1
 			rank = ordinal(rank)
-			print "rank:", rank
+			if DEBUG: print "rank:", rank
 			in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
 			purple_bar_i = session["pct_correct"]/10
 			if purple_bar_i == 10:
