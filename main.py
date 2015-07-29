@@ -773,6 +773,7 @@ def get_results():
 			purple_bar_i = session["pct_correct"]/10
 			if purple_bar_i == 10:
 				purple_bar_i = 9
+			histogram.close()
 			return render_template("results2.html", pct_correct=session["pct_correct"],
 												   num_correct=str(session["num_correct"]),
 												   lang=session.get("lang"),
@@ -784,7 +785,7 @@ def get_results():
 												   code_to_cuisine = CODE_TO_CUISINE,
 												   strings_d = STRINGS_D,
 												   liked_country = liked_country,
-												   rank = rank,
+												   rank=rank,
 												   quiz_data = quiz_data)
 		except Exception:
 			traceback.print_exc()
