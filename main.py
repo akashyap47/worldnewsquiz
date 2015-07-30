@@ -667,11 +667,11 @@ def submit_quiz():
 		logging.exception("basedir: " + basedir)
 		logging.log("basedir: " + basedir)
 		basedir = os.path.dirname(os.path.abspath(__file__))
-		if DEBUG: print "basedir:", basedir
-		try:
-			shelf = shelve.open(basedir + "/histogram.db")
-		except KeyError:
-			logging.info("basedir is: " + basedir)
+		# if DEBUG: print "basedir:", basedir
+		# try:
+			# shelf = shelve.open(basedir + "/histogram.db")
+		# except KeyError:
+			# logging.info("basedir is: " + basedir)
 		# shelf_k = int(math.floor(pct_correct/10) * 10)
 		# if shelf_k == 100:
 			# shelf_k = "90s"
@@ -681,6 +681,8 @@ def submit_quiz():
 		shelf.close()
 		db.session.commit()
 	except Exception, err:
+		basedir = os.path.dirname(os.path.abspath(__file__))
+		print "basedir:", basedir
 		traceback.print_exc()
 		return jsonify({"next": "error"})
 
