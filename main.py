@@ -4,6 +4,7 @@ import random
 import shelve
 import traceback
 import datetime
+import logging
 
 from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask.ext.cors import cross_origin
@@ -663,7 +664,7 @@ def submit_quiz():
 		try:
 			shelf = shelve.open(basedir + "/histogram.db")
 		except KeyError:
-			print "basedir:", basedir
+			logging.info("basedir is: " + basedir)
 		# shelf_k = int(math.floor(pct_correct/10) * 10)
 		# if shelf_k == 100:
 			# shelf_k = "90s"
