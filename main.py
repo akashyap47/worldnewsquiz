@@ -605,7 +605,6 @@ def quiz():
 
 @app.route("/submit_quiz/", methods=["POST"])
 def submit_quiz():
-	logging.debug("submit_quiz is being called.")
 	if user_completed_quiz() or not user_started_quiz():
 		return jsonify({"next": get_next_module()})
 	if session.get("consent") == False:
@@ -631,11 +630,8 @@ def submit_quiz():
 		user = User.query.filter_by(id=session.get("id")).first()
 		user.valid = True
 	except Exception, err:
-		logging.debug("SUPPAH SUCKA!")
 		print err
 		return jsonify({"next": "error"})
-
-	logging.debug("Catch me call if them...")
 
 	num_correct = 0
 	num_incorrect = 0
@@ -671,8 +667,8 @@ def submit_quiz():
 		db.session.commit()
 	except Exception, err:
 		basedir = os.path.dirname(os.path.abspath(__file__))
-		print "basedir:", basedir
-		logging.debug("basedir: " + basedir)
+		# print "basedir:", basedir
+		logging.error("basedir: " + basedir)
 		# traceback.print_exc()
 		return jsonify({"next": "error"})
 
