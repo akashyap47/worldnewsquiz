@@ -660,7 +660,10 @@ def submit_quiz():
 	session["pct_correct"] = pct_correct
 	try:
 		basedir = os.path.dirname(os.path.abspath(__file__))
-		shelf = shelve.open(basedir + "/histogram.db")
+		try:
+			shelf = shelve.open(basedir + "/histogram.db")
+		except KeyError:
+			print "basedir:", basedir
 		# shelf_k = int(math.floor(pct_correct/10) * 10)
 		# if shelf_k == 100:
 			# shelf_k = "90s"
