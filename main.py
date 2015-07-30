@@ -630,8 +630,11 @@ def submit_quiz():
 		user = User.query.filter_by(id=session.get("id")).first()
 		user.valid = True
 	except Exception, err:
+		logging.debug("SUPPAH SUCKA!")
 		print err
 		return jsonify({"next": "error"})
+
+	logging.debug("Catch me call if them...")
 
 	num_correct = 0
 	num_incorrect = 0
