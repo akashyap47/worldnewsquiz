@@ -661,6 +661,7 @@ def submit_quiz():
 	session["pct_correct"] = pct_correct
 	try:
 		basedir = os.path.dirname(os.path.abspath(__file__))
+		if DEBUG: print "basedir:", basedir
 		try:
 			shelf = shelve.open(basedir + "/histogram.db")
 		except KeyError:
