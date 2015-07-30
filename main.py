@@ -186,6 +186,7 @@ if not os.path.isfile(basedir + "/histogram.db"):
 		s[shelf_k] = 0
 	s.close()
 	db.create_all()
+logging.basicConfig(filename=basedir + "/worldnewsquiz.log", level=logging.DEBUG)
 
 SUPPORTED_LANGS = ["en", "chn"]
 
@@ -660,29 +661,14 @@ def submit_quiz():
 	session["num_correct"] = num_correct
 	session["pct_correct"] = pct_correct
 	try:
-		logging.info("basedir: " + basedir)
-		logging.warning("basedir: " + basedir)
-		logging.error("basedir: " + basedir)
-		logging.critical("basedir: " + basedir)
-		logging.exception("basedir: " + basedir)
-		logging.log("basedir: " + basedir)
-		basedir = os.path.dirname(os.path.abspath(__file__))
-		# if DEBUG: print "basedir:", basedir
-		# try:
-			# shelf = shelve.open(basedir + "/histogram.db")
-		# except KeyError:
-			# logging.info("basedir is: " + basedir)
-		# shelf_k = int(math.floor(pct_correct/10) * 10)
-		# if shelf_k == 100:
-			# shelf_k = "90s"
-		# else:
-			# shelf_k = str(shelf_k) + "s"
+
 		shelf[str(pct_correct)] += 1
 		shelf.close()
 		db.session.commit()
 	except Exception, err:
 		basedir = os.path.dirname(os.path.abspath(__file__))
 		print "basedir:", basedir
+		logging.debug("basedir: " + basedir)
 		# traceback.print_exc()
 		return jsonify({"next": "error"})
 
