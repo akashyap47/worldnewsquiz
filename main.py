@@ -660,13 +660,13 @@ def submit_quiz():
 	session["num_correct"] = num_correct
 	session["pct_correct"] = pct_correct
 	try:
-		basedir = os.path.dirname(os.path.abspath(__file__))
 		logging.info("basedir: " + basedir)
 		logging.warning("basedir: " + basedir)
 		logging.error("basedir: " + basedir)
 		logging.critical("basedir: " + basedir)
 		logging.exception("basedir: " + basedir)
 		logging.log("basedir: " + basedir)
+		basedir = os.path.dirname(os.path.abspath(__file__))
 		if DEBUG: print "basedir:", basedir
 		try:
 			shelf = shelve.open(basedir + "/histogram.db")
