@@ -683,7 +683,7 @@ def submit_quiz():
 	except Exception, err:
 		basedir = os.path.dirname(os.path.abspath(__file__))
 		print "basedir:", basedir
-		traceback.print_exc()
+		# traceback.print_exc()
 		return jsonify({"next": "error"})
 
 	if user_crowdflower() and gold_wrong and (tt[0] < 2 or (tt[0] == 2 and tt[1] < 30)):
