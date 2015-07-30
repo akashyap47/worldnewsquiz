@@ -605,6 +605,7 @@ def quiz():
 
 @app.route("/submit_quiz/", methods=["POST"])
 def submit_quiz():
+	logging.debug("submit_quiz is being called.")
 	if user_completed_quiz() or not user_started_quiz():
 		return jsonify({"next": get_next_module()})
 	if session.get("consent") == False:
