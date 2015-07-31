@@ -660,7 +660,7 @@ def submit_quiz():
 
 	pct_correct = int(num_correct/22. * 100)
 	session["num_correct"] = num_correct
-	session["pct_correct"] = pct_correct
+	# session["pct_correct"] = pct_correct
 	# try:
 	basedir = os.path.dirname(os.path.abspath(__file__))
 	shelf = shelve.open(basedir + "/histogram.db")
