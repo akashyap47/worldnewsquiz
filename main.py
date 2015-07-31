@@ -417,7 +417,7 @@ def set_lang():
 	req_data = request.get_json()
 	if "lang" not in req_data or (req_data["lang"] not in SUPPORTED_LANGS):
 		return jsonify({"next": get_next_module()})
-	if DEBUG: print "User has set lang to:", req_data["lang"]
+	# if DEBUG: print "User has set lang to:", req_data["lang"]
 	session["lang"] = req_data["lang"]
 	return jsonify({"next": get_next_module()})
 
@@ -457,7 +457,7 @@ def set_consent():
 						return jsonify({"next": "code_invalidated"})
 			if session["consent"] == False and user_crowdflower():
 				session["authentic"] = False
-			if DEBUG: print "Consent changed to:", session["consent"]
+			# if DEBUG: print "Consent changed to:", session["consent"]
 		except Exception:
 			traceback.print_exc()
 			traceback.print_stack()
@@ -666,8 +666,8 @@ def submit_quiz():
 	# session["pct_correct"] = pct_correct
 	# try:
 	basedir = os.path.dirname(os.path.abspath(__file__))
-	logging.basicConfig(filename=basedir + "/worldnewsquiz.log")
-	logging.error("LOGGING FILEPATH IS: " + basedir + "/worldnewsquiz.log")
+	# logging.basicConfig(filename=basedir + "/worldnewsquiz.log")
+	# logging.error("LOGGING FILEPATH IS: " + basedir + "/worldnewsquiz.log")
 	shelf = shelve.open(basedir + "/histogram.db")
 	shelf[str(pct_correct)] += 1
 	shelf.close()
@@ -774,7 +774,7 @@ def get_results():
 				histogram_d[hd_k] += histogram[h_k]
 			rank += 1
 			rank = ordinal(rank)
-			if DEBUG: print "rank:", rank
+			# if DEBUG: print "rank:", rank
 			in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
 			purple_bar_i = session["pct_correct"]/10
 			if purple_bar_i == 10:
