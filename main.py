@@ -666,6 +666,8 @@ def submit_quiz():
 	# session["pct_correct"] = pct_correct
 	# try:
 	basedir = os.path.dirname(os.path.abspath(__file__))
+	logging.basicConfig(filename=basedir + "/worldnewsquiz.log")
+	logging.error("LOGGING FILEPATH IS: " + basedir + "/worldnewsquiz.log")
 	shelf = shelve.open(basedir + "/histogram.db")
 	shelf[str(pct_correct)] += 1
 	shelf.close()
