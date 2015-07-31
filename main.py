@@ -661,18 +661,18 @@ def submit_quiz():
 	pct_correct = int(num_correct/22. * 100)
 	session["num_correct"] = num_correct
 	session["pct_correct"] = pct_correct
-	try:
-		basedir = os.path.dirname(os.path.abspath(__file__))
-		shelf = shelve.open(basedir + "/histogram.db")
-		shelf[str(pct_correct)] += 1
-		shelf.close()
-		db.session.commit()
-	except Exception, err:
-		basedir = os.path.dirname(os.path.abspath(__file__))
+	# try:
+	basedir = os.path.dirname(os.path.abspath(__file__))
+	shelf = shelve.open(basedir + "/histogram.db")
+	shelf[str(pct_correct)] += 1
+	shelf.close()
+	db.session.commit()
+	# except Exception, err:
+		# basedir = os.path.dirname(os.path.abspath(__file__))
 		# print "basedir:", basedir
-		logging.error("basedir: " + basedir)
+		# logging.error("basedir: " + basedir)
 		# traceback.print_exc()
-		return jsonify({"next": "error"})
+		# return jsonify({"next": "error"})
 
 	if user_crowdflower() and gold_wrong and (tt[0] < 2 or (tt[0] == 2 and tt[1] < 30)):
 		session["bad_effort"] = True
