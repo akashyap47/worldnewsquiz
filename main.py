@@ -606,6 +606,7 @@ def quiz():
 
 @app.route("/submit_quiz/", methods=["POST"])
 def submit_quiz():
+	print "QUIZ IS BEING SUBMITTED!"
 	if user_completed_quiz() or not user_started_quiz():
 		return jsonify({"next": get_next_module()})
 	if session.get("consent") == False:
@@ -657,6 +658,8 @@ def submit_quiz():
 	else:
 		readup_countries = random.sample(readup_countries, 3)
 	session["readup_countries"] = readup_countries
+
+	print "HELLO!!"
 
 	pct_correct = int(num_correct/22. * 100)
 	session["num_correct"] = num_correct
