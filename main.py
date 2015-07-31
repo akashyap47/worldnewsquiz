@@ -662,7 +662,8 @@ def submit_quiz():
 	session["num_correct"] = num_correct
 	session["pct_correct"] = pct_correct
 	try:
-
+		basedir = os.path.dirname(os.path.abspath(__file__))
+		shelf = shelve.open(basedir + "/histogram.db")
 		shelf[str(pct_correct)] += 1
 		shelf.close()
 		db.session.commit()
