@@ -187,6 +187,7 @@ if not os.path.isfile(basedir + "/histogram.db"):
 	s.close()
 	db.create_all()
 logging.basicConfig(filename=basedir + "/worldnewsquiz.log")
+print "logging.basicConfig:", str(1+2)
 
 SUPPORTED_LANGS = ["en", "chn"]
 
