@@ -875,6 +875,3 @@ def generate_quiz_data():
 	quiz_data.insert(6, {"story_id": 400, "story": (STORIES[400][lang]).decode("utf-8"), "choices": c400})
 	quiz_data.insert(15, {"story_id": 401, "story": (STORIES[401][lang]).decode("utf-8"), "choices": c401})
 	return quiz_data
-
-if __name__ == '__main__':
-	app.run(debug=True)
