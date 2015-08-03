@@ -19,6 +19,14 @@ db = SQLAlchemy(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+OVERLOADED = False
+
+@app.before_request
+def show_overloaded_page():
+	if OVERLOADED:
+		return render_template("overloaded.html", lang=session.get("lang", "en"),
+										          strings_d=STRINGS_D)
+
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	ip_addr = db.Column(db.String(45))

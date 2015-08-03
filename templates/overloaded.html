@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ strings_d["World News Quiz"][lang] }} | {{ strings_d["Error"][lang] }}</title>
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/no_consent.css') }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+</head>
+
+<body>
+	<div ng-app="gbOqtApp">
+		<div class="container-fluid" id="main_container">
+		<h1 id='study_end_title'>{{ strings_d["Oops!"][lang] }}</h1>
+		<br>
+		<div id='study_end_explanation'>
+			<h2>{{ strings_d["Sorry!"][lang] }} {{ strings_d["There's an issue and we're working to fix it! Try coming back a bit later."][lang] }}</h2>
+		</div>
+	</div>
+</body>
+
+</html>
