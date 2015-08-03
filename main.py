@@ -14,7 +14,7 @@ DEBUG = False
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///worldnewsquiz.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://worldnews_dev:news4th3world@localhost/worldnewsquiz_dev"
 db = SQLAlchemy(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
