@@ -587,7 +587,7 @@ def get_results():
 			q_data = {}
 			story_id = getattr(result, "q" + str(i+1) + "_sid")
 			ans = getattr(result, "q" + str(i+1) + "_ans")
-			if STORIES[story_id].get("gold_answer") == "Positive":
+			if ans != "na" and STORIES[story_id].get("gold_answer") == "Positive":
 				pos_valence.append(ans)
 			if ans == STORIES[story_id]["country"]:
 				num_correct += 1
