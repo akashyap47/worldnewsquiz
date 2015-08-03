@@ -1,7 +1,6 @@
 import math
 import os
 import random
-import shelve
 import traceback
 import datetime
 
@@ -171,16 +170,19 @@ class Quiz(db.Model):
 	t_started = db.Column(db.DateTime)
 	t_submitted = db.Column(db.DateTime, nullable=True)
 
-basedir = os.path.dirname(os.path.abspath(__file__))
-if not os.path.isfile(basedir + "/histogram.db"):
-	s = shelve.open(basedir + "/histogram.db")
-	for i in xrange(23):
-		shelf_k = str(int(i/22. * 100))
-		s[shelf_k] = 0
-	for k in SAMPLE_RESULTS:
-		s[k] += SAMPLE_RESULTS[k]
-	s.close()
-	db.create_all()
+class Histogram(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	val = db.Column(db.Integer, unique=True)
+	num = db.Column(db.Integer)
+
+db.create_all()
+if len(Histogram.query.all()) == 0:
+	for i in xrange(0, 23):
+		h = Histogram()
+		h.val = int(i/22. * 100)
+		h.num = SAMPLE_RESULTS[str(h.val)]
+		db.session.add(h)
+	db.session.commit()
 
 SUPPORTED_LANGS = ["en", "chn"]
 
@@ -216,7 +218,7 @@ PC_TO_IMGUR_HASH = {
 	"en90": "XSqHtuS",
 	"en95": "iYec9VZ",
 	"en100": "9VXJpAO",
-	"chn200": "abc",
+	"chn200": "D9p2SCT",
 	"chn0": "XI7cANq",
 	"chn4": "JvYpKg8",
 	"chn9": "bnECaiI",
@@ -547,10 +549,8 @@ def submit_quiz():
 	session["num_correct"] = num_correct
 	session["pct_correct"] = pct_correct
 	try:
-		basedir = os.path.dirname(os.path.abspath(__file__))
-		shelf = shelve.open(basedir + "/histogram.db")
-		shelf[str(pct_correct)] += 1
-		shelf.close()
+		h = Histogram.query.filter_by(val=pct_correct).first()
+		h.num += 1
 		db.session.commit()
 	except Exception, err:
 		basedir = os.path.dirname(os.path.abspath(__file__))
@@ -614,29 +614,27 @@ def get_results():
 		else:
 			liked_country = STRINGS_D[ISO_CODE_TO_COUNTRY_NAME[liked_country]]["chn"]
 		basedir = os.path.dirname(os.path.abspath(__file__))
-		histogram = shelve.open(basedir + "/histogram.db")
+		histogram = Histogram.query.all()
 		histogram_d = {}
 		rank = 0
 		for i in xrange(10):
 			h_k = str(i*10) + "s"
 			histogram_d[h_k] = 0
-		for i in xrange(23):
-			h_k = str(int(i/22. * 100))
-			hd_k = int(math.floor(int(i/22. * 100)/10) * 10)
-			if int(h_k) > session["pct_correct"]:
-				rank += histogram[h_k]
+		for h in histogram:
+			if h.val > session["pct_correct"]:
+				rank += h.num
+			hd_k = h.val/10 * 10
 			hd_k = str(hd_k) + "s"
 			if hd_k == "100s":
 				hd_k = "90s"
-			histogram_d[hd_k] += histogram[h_k]
+			histogram_d[hd_k] += h.num
 		rank += 1
 		if session.get("lang") == "en":
 			rank = ordinal(rank)
-		in_china = (session.get("crowdflower") and session.get("lang") == "chn") or session.get("country_residence") == "chn"
+		in_china = session.get("country_residence") == "chn"
 		purple_bar_i = session["pct_correct"]/10
 		if purple_bar_i == 10:
 			purple_bar_i = 9
-		histogram.close()
 		return render_template("results2.html", pct_correct=session["pct_correct"],
 											   num_correct=str(session["num_correct"]),
 											   lang=session.get("lang"),
