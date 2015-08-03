@@ -192,7 +192,7 @@ VALID_RESIDENCES = ISO_CODE_TO_COUNTRY_NAME.keys() + ["na", "other"]
 VALID_LANGS = SUPPORTED_LANGS + ["na", "other"]
 
 PC_TO_IMGUR_HASH = {
-	"en200": "abc",
+	"en200": "Q2q9ndu",
 	"en0": "3z0Bi0R",
 	"en4": "GVU0dv4",
 	"en9": "QrhjrhD",
