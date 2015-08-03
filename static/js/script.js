@@ -1,25 +1,33 @@
 var gbOqtApp = angular.module("gbOqtApp", []);
 
 gbOqtApp.controller("LangCtrl", ["$scope", "$http", function($scope, $http) {
-	$scope.setLang = function(lang) {
+	$scope.setLang = function(lang, i) {
 		$http.post("/set_lang/", {"lang": lang}).
 		success(function(data, status, headers, config) {
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
-			$scope.setLang(lang);
+			if (i == 2) {
+				window.location = "/error/";
+			} else {
+				$scope.setLang(lang, i+1);
+			}
 		});
 	}
 }]);
 
 gbOqtApp.controller("ConsentCtrl", ["$scope", "$http", function($scope, $http) {
-	$scope.setConsent = function(consent) {
+	$scope.setConsent = function(consent, i) {
 		$http.post("/set_consent/", {"consent": consent}).
 		success(function(data, status, headers, config) {
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
-			$scope.setConsent();
+			if (i == 2) {
+				window.location = "/error/";
+			} else {
+				$scope.setConsent(consent, i+1);
+			}
 		});
 	}
 }]);
@@ -40,13 +48,17 @@ gbOqtApp.controller("DemographicsCtrl", ["$scope", "$http", function($scope, $ht
 		'native_lang': 'na'
 	};
 
-	$scope.setDemographics = function() {
+	$scope.setDemographics = function(i) {
 		$http.post("/set_demographics/", $scope.demographics).
 		success(function(data, status, headers, config) {
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
-			$scope.setDemographics();
+			if (i == 2) {
+				window.location = "/error/";
+			} else {
+				$scope.setDemographics(i+1);
+			}
 		});
 	}
 }]);
@@ -77,13 +89,17 @@ gbOqtApp.controller("QuizCtrl", ["$scope", "$http", function($scope, $http) {
 		'q22_ans': 'na'
 	};
 
-	$scope.submitQuiz = function() {
+	$scope.submitQuiz = function(i) {
 		$http.post("/submit_quiz/", $scope.quiz).
 		success(function(data, status, headers, config) {
 			window.location = "/" + data["next"] + "/";
 		}).
 		error(function(data, status, headers, config) {
-			$scope.submitQuiz();
+			if (i == 2) {
+				window.location = "/error/";
+			} else {
+				$scope.submitQuiz(i+1);
+			}
 		});
 	}
 }]);

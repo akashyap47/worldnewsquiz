@@ -9,15 +9,27 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-	<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 	<script>
 	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
 		$scope.shareOnFacebook = function() {
+			window.open("https://facebook.com/sharer/sharer.php?u=http://worldnewsquiz-dev.mediameter.org/", 'Share on Facebook', 'width=672,height=555');
+		}
+
+		$scope.shareScoreOnFacebook = function() {
 			window.open("https://facebook.com/sharer/sharer.php?u=http://worldnewsquiz-dev.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook', 'width=672,height=555');
 		}
 
 		$scope.shareOnTwitter = function() {
+			{% if lang == "en" %}
+			window.open("https://twitter.com/intent/tweet?text=Test%20your%20World%20News%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!&url=http%3A%2F%2Fworldnewsquiz-dev.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
+			{% else %}
+			window.open("https://twitter.com/intent/tweet?text=对世界新闻很熟悉？用MIT开发的工具测测您的世界新闻知识！&url=http%3A%2F%2Fworldnewsquiz-dev.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
+			{% endif %}
+		}
+
+		$scope.shareScoreOnTwitter = function() {
 			{% if lang == "en" %}
 			window.open("https://twitter.com/intent/tweet?text=I%20scored%20{{ pct_correct }}%25!%20Test%20your%20World%20News%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!&url=http%3A%2F%2Fworldnewsquiz-dev.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
 			{% else %}
@@ -84,7 +96,7 @@
 					{% if lang == "en" %}
 					You got <text>{{ num_correct }}</text> of the 22 questions right, and you're currently in <text>{{ rank }}</text> place!
 					{% else %}
-					在22道问题中，您成功回答了<text>{{ num_correct }}</text>题！
+					在22道问题中，您成功回答了<text>{{ num_correct }}</text>题！您现在的排名是第<text>{{ rank }}</text>！
 					{% endif %}
 					</div>
 				</div>
@@ -123,36 +135,52 @@
 			</div>
 			<div id="study_box" class="well">
 				<div id="study_title">
-				And you might really like {{ strings_d[code_to_country[liked_country]][lang] }}!
+				{% if lang == "en" %}
+				And you might really like {{ liked_country }}!
+				{% else %}
+				您似乎真的挺喜欢{{ liked_country }}！
+				{% endif %}
 				</div>
 				<div class="study_explanation" id="study_explanation1">
+				{% if lang == "en" %}
 				Like we said, we weren't <text>actually</text> testing your knowledge. While every news story you encountered comes from an actual article, we intentionally made the stories vague and imprecise.
+				{% else %}
+				正如我们之前所说，我们并非在测试您的<text>知识</text>。您看到的新闻故事，虽然均来自真实的新闻报道，但我们故意把它们模糊化。
+				{% endif %}
 				</div>
 				<div class="study_explanation" id="study_explanation2">
-				So when you're answering our questions, you're relying on your <text>impressions</text> of particular countries. Which countries do you feel productively harness renewable energy? Which countries do you feel struggle with censorship? Which countries do you feel have a growing, robust economy? Your responses help us identify and <text>quantify</text> these sentiments. 
+				{% if lang == "en" %}
+				So when you're answering our questions, you're relying on your <text>impressions</text> of particular countries. Which countries do you feel productively harness renewable energy? Which countries do you feel struggle with censorship? Which countries do you feel have a growing, robust economy? Your responses help us identify and <text>quantify</text> these sentiments.
+				{% else %}
+				因此，当您回答我们的问题时，您需要依赖对于个别国家的主观<text>印象</text>。您觉得哪些国家在积极生产可再生能源，或是哪些国家正面对审查问题？而您又觉得哪些国家拥有正在增长又稳健的经济？您的答案能够帮助我们辨识和量化这些感觉。
+				{% endif %}
 				</div>
 				<div id="share_pitch">
+				{% if lang == "en" %}
 				<b>We need many more people to take this quiz. If you'd like to help us out, we'd appreciate if you <text>pass this along</text>!</b>
+				{% else %}
+				<b>我们需要更多人参与这个测验。如果您愿意帮忙转发，我们会非常感激！</b>
+				{% endif %}
 				</div>
 				<hr>
 				<div id="share_module">
 					{% if not in_china %}
 					<div id="sharing_labels">
 						<div class="share_label" id="no_score_share_label">
-						I'll share the quiz!
+						{{ strings_d["I'll share the quiz!"][lang] }}
 						</div>
 						<div class="share_label" id="score_share_label">
-						I'm confident! I'll share my score too!
+						{{ strings_d["I'm confident! I'll share my score too!"][lang] }}
 						</div>
 					</div>
-					<div id="sharing_buttons">
+					<div id="sharing_buttons" ng-controller="ResultsCtrl">
 						<div class="share_buttons" id="no_score_share_buttons">
 							<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
 							<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
 						</div>
 						<div class="share_buttons" id="score_share_buttons">
-							<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
-							<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
+							<input ng-click="shareScoreOnFacebook()" id="fb_score_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
+							<input ng-click="shareScoreOnTwitter()" id="twitter_score_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
 						</div>
 					</div>
 					{% else %}
@@ -163,7 +191,7 @@
 				</div>
 		</div>
 	</div>
-	<div id="footer">
+	<div hidden id="footer">
       {{ strings_d["Center for Civic Media @ MIT Media Lab, 2015."][lang] }}
       </div>
 </body>

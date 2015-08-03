@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
-    <!--<link rel="stylesheet" href="{{ url_for("static", filename="css/splash.css") }}">-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -45,14 +44,17 @@
 
 		$scope.lastRendered = 1;
 
-		$scope.submitQuiz = function() {
+		$scope.submitQuiz = function(i) {
 			$http.post("/submit_quiz/", $scope.quiz).
 			success(function(data, status, headers, config) {
-				// window.location = "http://localhost:5000/" + data["next"] + "/";
 				window.location = "/" + data["next"] + "/";
 			}).
 			error(function(data, status, headers, config) {
-				$scope.submitQuiz();
+				if (i == 2) {
+					window.location = "/error/";
+				} else {
+					$scope.submitQuiz(i+1);
+				}
 			});
 		}
 
@@ -70,7 +72,6 @@
 
 			var renderIndex = $scope.lastRendered + 1;
 			var renderIndexString = (renderIndex).toString();
-			// $("#" + renderIndexString + "_row").attr("hidden", false);
 			$("#" + renderIndexString + "_row").fadeIn(100, "swing");
 			$('html,body').animate({
 				scrollTop: $("#" + renderIndexString + "_row").offset().top - 285,
@@ -131,7 +132,7 @@
 				<!--<br>-->
 				{% endfor %}
 				</table>
-				<input id="submit_button" class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" ng-click="submitQuiz()" value="{{ strings_d["Submit"][lang] }}"></input>
+				<input id="submit_button" class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" ng-click="submitQuiz(0)" value="{{ strings_d["Submit"][lang] }}"></input>
 				<input id="nq_button" class="btn btn-default btn-submit" style="outline-color: #9245AB;" type="submit" ng-click="renderNextQuestion()" value="{{ strings_d["Next Question"][lang] }}"></input>
 				<div class="progress">
 				  <div class="progress-bar" role="progressbar" aria-valuenow="0"

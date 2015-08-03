@@ -11,11 +11,6 @@
 
 #result_box {
 	margin-top: 30px;
-	/*
-	BELOW IS NEW:;
-	*/
-	/*width: 350px;
-	display: inline-block;*/
 	width: 775px;
 	margin-left: 60px;
 	margin-right: auto;
@@ -46,16 +41,9 @@
 	margin-left: 35px;
 }
 
-#sharing_box {
-	/*display: inline-block;*/
-	/*width: 350px;/**/
-	/*margin-left: 150px;*/
-}
-
 #thanks_en {
 	font-size: 16px;
 	margin-left: 70px;
-	/*text-align: center;*/
 }
 
 #thanks_chn {
@@ -70,7 +58,6 @@
 }
 
 a {
-	/*font-family: Arial;*/
 	text-decoration: underline;
 }
 
@@ -106,10 +93,6 @@ body .twitter-share-button {
 
 #fb_share_button {
 	width: 300px;
-	/*background: -webkit-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
-	background: -moz-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
-	background: -ms-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));
-	background: -o-gradient(linear, center top, center bottom, from(#4c69ba), to(#3b55a0));*/
 	background: -webkit-linear-gradient(#4c69ba, #3b55a0);
 	background: -moz-linear-gradient(#4c69ba, #3b55a0);
 	background: -ms-linear-gradient(#4c69ba, #3b55a0);
