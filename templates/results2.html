@@ -43,7 +43,7 @@
 
 		$scope.shareScoreOnTwitter = function() {
 			{% if lang == "en" %}
-			window.open("https://twitter.com/intent/tweet?text=I%20scored%2036%25!%20Test%20_your_%20World%20News%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!&url=https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
+			window.open("https://twitter.com/intent/tweet?text=I%20scored%20{{ pct_correct }}%25!%20Test%20_your_%20World%20News%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!&url=https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
 			{% else %}
 			window.open("https://twitter.com/intent/tweet?text=我得到{{ pct_correct }}分！对世界新闻很熟悉？用MIT开发的工具测测您的世界新闻知识！&url=https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
 			{% endif %}
