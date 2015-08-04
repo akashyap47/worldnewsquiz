@@ -34,12 +34,12 @@
 
 #consent_buttons {
 	display: block;
-	width: 365px;
+	width: 425px;
 	margin: auto;
 }
 
 input.btn-submit {
-	width: 175px;
+	width: 200px;
 	display: inline;
 	margin-right: 5px;
 }
