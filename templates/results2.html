@@ -14,11 +14,11 @@
 	<script>
 	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
 		$scope.shareOnFacebook = function() {
-			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook', 'width=672,height=555');
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook', 'width=672,height=600');
 		}
 
 		$scope.shareScoreOnFacebook = function() {
-			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook', 'width=672,height=555');
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook', 'width=672,height=600');
 		}
 
 		$scope.shareOnTwitter = function() {
