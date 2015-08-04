@@ -18,11 +18,19 @@
 	<script>
 	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
 		$scope.shareOnFacebook = function() {
+			{% if lang == "en" %}
 			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook', 'width=672,height=600');
+			{% else %}
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook');
+			{% endif %}
 		}
 
 		$scope.shareScoreOnFacebook = function() {
+			{% if lang == "en" %}
 			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook', 'width=672,height=600');
+			{% else %}
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook');
+			{% endif %}
 		}
 
 		$scope.shareOnTwitter = function() {
