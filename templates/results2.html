@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8" />
+	<meta name="google" content="notranslate" />
+	<meta http-equiv="Content-Language" content="en_US" />
+
 	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
@@ -14,18 +18,18 @@
 	<script>
 	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
 		$scope.shareOnFacebook = function() {
-			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook', 'width=672,height=800');
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook', 'width=672,height=600');
 		}
 
 		$scope.shareScoreOnFacebook = function() {
-			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook', 'width=672,height=800');
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}{{ pct_correct }}", 'Share on Facebook', 'width=672,height=600');
 		}
 
 		$scope.shareOnTwitter = function() {
 			{% if lang == "en" %}
-			window.open("https://twitter.com/intent/tweet?text=Think%20you%20know%20what%27s%20happening%20in%20the%20world%3F%20Test%20your%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!%20https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=824');
+			window.open("https://twitter.com/intent/tweet?text=Think%20you%20know%20what%27s%20happening%20in%20the%20world%3F%20Test%20your%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!%20https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
 			{% else %}
-			window.open("https://twitter.com/intent/tweet?text=对世界新闻很熟悉？用MIT开发的工具测测您的世界新闻知识！&url=https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=824');
+			window.open("https://twitter.com/intent/tweet?text=对世界新闻很熟悉？用MIT开发的工具测测您的世界新闻知识！&url=https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
 			{% endif %}
 		}
 
