@@ -14,7 +14,7 @@ DEBUG = False
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://worldnews:th1sIsnews4th3world@localhost/worldnewsquiz"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://worldnews_dev:news4th3world@localhost/worldnewsquiz"
 db = SQLAlchemy(app)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
