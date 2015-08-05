@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="google" content="notranslate" />
+	<meta http-equiv="Content-Language" content="en_US" />
+
+	<title>World News Quiz | Error</title>
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/no_consent.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/beta_test_error.css') }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+	gbOqtApp.controller("ResultsCtrl", ["$scope", "$http", function($scope, $http) {
+		$scope.shareOnFacebook = function() {
+			{% if lang == "en" %}
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook', 'width=672,height=600');
+			{% else %}
+			window.open("https://facebook.com/sharer/sharer.php?u=https://worldnewsquiz.mediameter.org/?storyv={{ lang }}200", 'Share on Facebook');
+			{% endif %}
+		}
+
+		$scope.shareOnTwitter = function() {
+			{% if lang == "en" %}
+			window.open("https://twitter.com/intent/tweet?text=Think%20you%20know%20what%27s%20happening%20in%20the%20world%3F%20Test%20your%20knowledge%20with%20this%20quiz%20developed%20at%20MIT!%20https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
+			{% else %}
+			window.open("https://twitter.com/intent/tweet?text=对世界新闻很熟悉？用MIT开发的工具测测您的世界新闻知识！&url=https%3A%2F%2Fworldnewsquiz.mediameter.org&hashtags=WorldNewsQuiz", "Share on Twitter", 'width=534,height=424');
+			{% endif %}
+		}
+	}]);
+	</script>
+</head>
+
+<body>
+	<div ng-app="gbOqtApp">
+		<div class="container-fluid" id="main_container">
+		<h3 id='study_end_title'>Oops!</h3>
+		<div id='study_end_explanation'>
+			If you're getting this message, it means you were a beta tester of the tool. We'd rather you not take the quiz again, but please do share it with as many people you know!
+		</div>
+		<div id="sharing_buttons" ng-controller="ResultsCtrl">
+			<div class="share_buttons" id="no_score_share_buttons">
+				<input ng-click="shareOnFacebook()" id="fb_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Facebook"][lang] }}"></input>
+				<input ng-click="shareOnTwitter()" id="twitter_share_button" class="btn btn-default" style="outline-color: #9245AB;" type="submit" value="{{ strings_d["Share on Twitter"][lang] }}"></input>
+			</div>
+		</div>
+</body>
+
+</html>

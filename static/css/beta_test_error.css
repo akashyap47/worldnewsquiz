@@ -1,0 +1,74 @@
+#sharing_buttons {
+	margin-left: 275px;
+	margin-top: 30px;
+}
+
+.share_buttons {
+	display: inline-block;
+	width: 240px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#fb_share_button {
+	width: 400px;
+	background: -webkit-linear-gradient(#4c69ba, #3b55a0);
+	background: -moz-linear-gradient(#4c69ba, #3b55a0);
+	background: -ms-linear-gradient(#4c69ba, #3b55a0);
+	background: -o-linear-gradient(#4c69ba, #3b55a0);
+	border: none;
+	color: white;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	transform: scale(1.3);
+	-webkit-transform: scale(1.3);
+	-moz-transform: scale(1.3);
+	-ms-transform: scale(1.3);
+	-o-transform: scale(1.3);
+}
+
+#fb_share_button:hover {
+	background: -webkit-linear-gradient(#5b7bd5, #4864b1);
+	background: -moz-linear-gradient(#5b7bd5, #4864b1);
+	background: -ms-linear-gradient(#5b7bd5, #4864b1);
+	background: -o-linear-gradient(#5b7bd5, #4864b1);
+	border-color: #5874c3 #4961a8 #41599f;
+	-webkit-box-shadow: inset 0 0 1px #607fd6;
+	-moz-box-shadow: inset 0 0 1px #607fd6;
+	-ms-box-shadow: inset 0 0 1px #607fd6;
+	-o-box-shadow: inset 0 0 1px #607fd6;
+}
+
+#twitter_share_button {
+	width: 400px;
+	background-color: #55acee;
+	background-image: linear-gradient(#55acee,#2795e9);
+	background-image: -webkit-linear-gradient(#55acee,#2795e9);
+	background-image: -moz-linear-gradient(#55acee,#2795e9);
+	background-image: -ms-linear-gradient(#55acee,#2795e9);
+	background-image: -o-linear-gradient(#55acee,#2795e9);
+	border: none;
+	color: white;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	transform: scale(1.3);
+	margin-top: 15px;
+	-webkit-transform: scale(1.3);
+	-moz-transform: scale(1.3);
+	-ms-transform: scale(1.3);
+	-o-transform: scale(1.3);
+}
+
+#twitter_share_button:hover {
+	background: -webkit-linear-gradient(#6cb7f0, #3ea1ec);
+	background: -moz-linear-gradient(#6cb7f0, #3ea1ec);
+	background: -ms-linear-gradient(#6cb7f0, #3ea1ec);
+	background: -o-linear-gradient(#6cb7f0, #3ea1ec);
+	border-color: #6cb7f0 #55acee #3ea1ec;
+	-webkit-box-shadow: inset 0 0 1px #6cb7f0;
+	-moz-transform: scale(1.3);
+	-ms-transform: scale(1.3);
+	-o-transform: scale(1.3);
+}

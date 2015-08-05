@@ -409,6 +409,8 @@ def set_consent():
 		except Exception:
 			traceback.print_exc()
 			traceback.print_stack()
+			if session.get("id", 31) < 31:
+				return jsonify({"next": "beta_test_error"})
 			return jsonify({"next": "error"})
 	return jsonify({"next": get_next_module()})
 
@@ -469,6 +471,8 @@ def set_demographics():
 			db.session.commit()
 	except Exception:
 		traceback.print_exc()
+		if session.get("id", 31) < 31:
+			return jsonify({"next": "beta_test_error"})
 		return jsonify({"next": "error"})
 	return jsonify({"next": get_next_module()})
 
@@ -493,6 +497,9 @@ def quiz():
 			persist_initial_state(quiz_data)
 	except Exception:
 		traceback.print_exc()
+		if session.get("id", 31) < 31:
+			return render_template("beta_test_error.html", lang=session.get("lang"),
+														   strings_d=STRINGS_D)
 		return render_template("error.html", lang=session.get("lang"),
 									         strings_d=STRINGS_D)
 	session["quiz_started"] = True
@@ -527,6 +534,8 @@ def submit_quiz():
 		user.valid = True
 	except Exception, err:
 		print err
+		if session.get("id", 31) < 31:
+			return jsonify({"next": "beta_test_error"})
 		return jsonify({"next": "error"})
 
 	num_correct = 0
@@ -563,6 +572,8 @@ def submit_quiz():
 	except Exception, err:
 		basedir = os.path.dirname(os.path.abspath(__file__))
 		traceback.print_exc()
+		if session.get("id", 31) < 31:
+			return jsonify({"next": "beta_test_error"})
 		return jsonify({"next": "error"})
 
 	session["quiz_completed"] = True
@@ -657,6 +668,9 @@ def get_results():
 											   quiz_data = quiz_data)
 	except Exception:
 		traceback.print_exc()
+		if session.get("id", 31) < 31:
+			return render_template("beta_test_error.html", lang=session.get("lang"),
+														   strings_d=STRINGS_D)
 		return render_template("error.html", lang=session.get("lang"),
 									         strings_d=STRINGS_D)
 
@@ -664,6 +678,11 @@ def get_results():
 def error():
 	return render_template("error.html", lang=session.get("lang"),
 									     strings_d=STRINGS_D)
+
+@app.route('/beta_test_error/', methods=['GET'])
+def beta_test_error():
+	return render_template("beta_test_error.html", lang=session.get("lang"),
+												   strings_d=STRINGS_D)
 
 def get_quiz_data(uid):
 	result = Quiz.query.filter_by(user_id=uid).first()
