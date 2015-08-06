@@ -136,6 +136,14 @@
 								<br>
 								{% endif %}
 							{% endfor %}
+							{% if quiz_datum["user_ans"] == "na" %}
+								{% if lang == "en" %}
+								<text class="incorrect">&#x2717;</text> no answer given
+								{% else %}
+								<text class="incorrect">&#x2717;</text> 没有给出答案
+								{% endif %}
+							<br>
+							{% endif %}
 							<div class="learn_more_link"><a href="{{ quiz_datum["link"] }}" target="_blank">Learn more</a></div>
 						</div>
 					</div>
